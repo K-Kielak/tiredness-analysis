@@ -2,6 +2,7 @@ import logging
 import os
 
 import matplotlib.pyplot as plt
+import numpy as np
 
 from tiredness_analysis.config import ANALYSIS_OUTPUT_DIR, BATCH_SIZE
 from tiredness_analysis.config import FRAMES_TO_SKIP, LOGGING_LEVEL
@@ -34,11 +35,27 @@ def _plot_data(data_dict, render_figs=True, output_dir=None):
     """
     for i, (key, data) in enumerate(data_dict.items()):
         timespans, values = zip(*data)  # unzip list of tuples
+        linear_trend = np.poly1d(np.polyfit(timespans, values, 1))
+        quadratic_trend = np.poly1d(np.polyfit(timespans, values, 2))
+        cubic_trend = np.poly1d(np.polyfit(timespans, values, 3))
+        quintic_trend = np.poly1d(np.polyfit(timespans, values, 5))
+
         plt.figure(key)
         plt.suptitle(key)
         plt.xlabel('time')
         plt.ylabel('value')
-        plt.plot(timespans, values)
+        plt.plot(timespans, values, 'bo', label='data')
+        plt.plot(timespans, linear_trend(timespans),
+                 '-r', label='linear trend')
+        plt.plot(timespans, quadratic_trend(timespans),
+                 '-g', label='quadratic trend')
+        plt.plot(timespans, cubic_trend(timespans),
+                 '-y', label='cubic trend')
+        plt.plot(timespans, quintic_trend(timespans),
+                 '-k', label='quintic trend')
+        plt.legend(loc='best')
+        plt.grid(True)
+
         if output_dir:
             fig_path = os.path.join(output_dir, f'{key}.png')
             plt.savefig(fig_path)

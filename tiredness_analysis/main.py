@@ -6,7 +6,8 @@ import matplotlib.pyplot as plt
 from teyered.data_processing.blinks_detection import detect_blinks
 from teyered.data_processing.eye_area_calculation import \
     calculate_polygon_area, normalize_eye_points
-from teyered.io.files import load_video
+from teyered.data_processing.points_extractor import FacialPointsExtractor
+from teyered.io.files import VideoGenerator
 
 from tiredness_analysis.config import ANALYSIS_OUTPUT_DIR, FRAMES_TO_SKIP, \
      LOGGING_LEVEL, RENDER_FIGS, SAVE_FIGS, VIDS_TO_ANALYZE
@@ -38,22 +39,22 @@ def main():
 
 
 def _analyze_video(filepath, frames_to_skip):
-    frames = load_video(filepath, frames_to_skip)
-    logging.info(f'Loaded {len(frames)} frames')
+    pts_extractor = FacialPointsExtractor()
 
     left_eye_points = []
     right_eye_points = []
+    with VideoGenerator(filepath, frames_to_skip) as video:
+        logger.info('Extracting facial points...')
+        while not video.is_over():
+            timespan, frame = video.get_next_frame()
+            facial_points = pts_extractor.extract_facial_points(frame)
+            left_eye = facial_points['left_eye']
+            if left_eye:
+                left_eye_points.append((timespan, left_eye))
 
-    logger.info('Extracting facial points...')
-    for t, f in frames:
-        facial_points = extract_facial_points(f)
-        left_eye = facial_points['left_eye']
-        if left_eye:
-            left_eye_points.append((t, left_eye))
-
-        right_eye = facial_points['right_eye']
-        if right_eye:
-            right_eye_points.append((t, right_eye))
+            right_eye = facial_points['right_eye']
+            if right_eye:
+                right_eye_points.append((timespan, right_eye))
 
     logger.info(f'Analyzing left eye... '
                 f'(frames to analyze: {len(left_eye_points)}')

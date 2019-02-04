@@ -15,8 +15,8 @@ ANALYSIS_OUTPUT_DIR = os.path.join(OUTPUTS_DIR, ANALYSIS_DATE)
 VIDS_TO_ANALYZE = [
      'paths/to/videos/to/analyze'
 ]
-FRAMES_TO_SKIP = 1000  # Every frametoskip'th frame is included in the analysis
+FRAMES_TO_SKIP = 1  # Every frametoskip'th frame is included in the analysis
 RENDER_FIGS = True
 SAVE_FIGS = True
 
-LOGGING_LEVEL = logging.DEBUG
+LOGGING_LEVEL = logging.INFO

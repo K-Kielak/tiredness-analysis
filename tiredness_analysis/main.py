@@ -35,15 +35,19 @@ def _plot_data(data_dict, render_figs=True, output_dir=None):
     """
     for i, (key, data) in enumerate(data_dict.items()):
         timespans, values = zip(*data)  # unzip list of tuples
+
+        plt.figure(key, figsize=(12.8, 4.8))
+        plt.suptitle(key)
+
+        # Plotting pure values subplot
+        plt.subplot(121)
+        plt.title('values')
+        plt.xlabel('time')
+        plt.ylabel('value')
         linear_trend = np.poly1d(np.polyfit(timespans, values, 1))
         quadratic_trend = np.poly1d(np.polyfit(timespans, values, 2))
         cubic_trend = np.poly1d(np.polyfit(timespans, values, 3))
         quintic_trend = np.poly1d(np.polyfit(timespans, values, 5))
-
-        plt.figure(key)
-        plt.suptitle(key)
-        plt.xlabel('time')
-        plt.ylabel('value')
         plt.plot(timespans, values, 'bo', label='data')
         plt.plot(timespans, linear_trend(timespans),
                  '-r', label='linear trend')
@@ -56,10 +60,18 @@ def _plot_data(data_dict, render_figs=True, output_dir=None):
         plt.legend(loc='best')
         plt.grid(True)
 
+        # Plotting histogram subplot
+        plt.subplot(122)
+        plt.title('histogram')
+        plt.xlabel('value')
+        plt.ylabel('frequency')
+        plt.hist(values, 50)
+        plt.grid(True)
+
+        # Saving/rendering plots
         if output_dir:
             fig_path = os.path.join(output_dir, f'{key}.png')
             plt.savefig(fig_path)
-
         if render_figs:
             plt.show()
 

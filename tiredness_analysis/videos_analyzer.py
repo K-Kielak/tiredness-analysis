@@ -10,6 +10,10 @@ from teyered.teyered_processor import TeyeredProcessor
 logger = logging.getLogger(__name__)
 
 
+LEFT_EYE_PREFIX = 'left_'
+RIGHT_EYE_PREFIX = 'right_'
+
+
 class VideoAnalyzer:
 
     def __init__(self, batch_size):
@@ -47,8 +51,10 @@ class VideoAnalyzer:
 
         logger.info('Extracting information from all videos has finished.')
         logger.info('Starting blinks calculation...')
-        self._calc_blinks_data('left_')
-        self._calc_blinks_data('right_')
+        self._remove_undetermined_closedness(LEFT_EYE_PREFIX)
+        self._remove_undetermined_closedness(RIGHT_EYE_PREFIX)
+        self._calc_blinks_data(LEFT_EYE_PREFIX)
+        self._calc_blinks_data(RIGHT_EYE_PREFIX)
         logger.info('Blinks calculation has finished')
         return self._data
 
@@ -81,11 +87,15 @@ class VideoAnalyzer:
 
         self._last_vid_end_timespan = curr_vid_end_timespan
 
+    def _remove_undetermined_closedness(self, prefix):
+        self._data[f'{prefix}eye_closedness'] = \
+            [(t, c) for t, c in self._data[f'{prefix}eye_closedness'] if c >= 0]
+
     def _calc_blinks_data(self, prefix):
         measurements = self._data[f'{prefix}eye_closedness']
         blinks = detect_blinks(measurements)
         self._data[f'{prefix}blink_lengths'] = [(blinks[0].get_time_range()[0],
-                                                  blinks[0].get_duration())]
+                                                 blinks[0].get_duration())]
         for i in range(1, len(blinks)):
             prev_blink_end = blinks[i - 1].get_time_range()[1]
             curr_blink_start = blinks[i].get_time_range()[0]

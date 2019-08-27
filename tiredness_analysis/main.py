@@ -13,11 +13,16 @@ from tiredness_analysis.videos_analyzer import VideoAnalyzer
 logger = logging.getLogger(__name__)
 
 
+SUBPLOT_NROWS = 1
+SUBPLOT_NCOLS = 2
+
+
 def main():
     os.mkdir(ANALYSIS_OUTPUT_DIR)
     videos_analyzer = VideoAnalyzer(BATCH_SIZE)
     analyzed_data = videos_analyzer.analyze_videos(VIDS_TO_ANALYZE,
                                                    FRAMES_TO_SKIP)
+
     _plot_data(analyzed_data,
                render_figs=RENDER_FIGS,
                output_dir=ANALYSIS_OUTPUT_DIR)
@@ -40,7 +45,7 @@ def _plot_data(data_dict, render_figs=True, output_dir=None):
         plt.suptitle(key)
 
         # Plotting pure values subplot
-        plt.subplot(121)
+        plt.subplot(SUBPLOT_NROWS, SUBPLOT_NCOLS, 1)
         plt.title('values')
         plt.xlabel('time')
         plt.ylabel('value')
@@ -48,24 +53,24 @@ def _plot_data(data_dict, render_figs=True, output_dir=None):
         quadratic_trend = np.poly1d(np.polyfit(timespans, values, 2))
         cubic_trend = np.poly1d(np.polyfit(timespans, values, 3))
         quintic_trend = np.poly1d(np.polyfit(timespans, values, 5))
-        plt.plot(timespans, values, 'bo', label='data')
+        plt.plot(timespans, values, 'b.', label='data', markersize=1)
         plt.plot(timespans, linear_trend(timespans),
-                 '-r', label='linear trend')
+                 '--r', label='linear trend')
         plt.plot(timespans, quadratic_trend(timespans),
-                 '-g', label='quadratic trend')
+                 '--g', label='quadratic trend')
         plt.plot(timespans, cubic_trend(timespans),
-                 '-y', label='cubic trend')
+                 '--y', label='cubic trend')
         plt.plot(timespans, quintic_trend(timespans),
-                 '-k', label='quintic trend')
+                 '--k', label='quintic trend')
         plt.legend(loc='best')
         plt.grid(True)
 
         # Plotting histogram subplot
-        plt.subplot(122)
+        plt.subplot(SUBPLOT_NROWS, SUBPLOT_NCOLS, 2)
         plt.title('histogram')
         plt.xlabel('value')
         plt.ylabel('frequency')
-        plt.hist(values, 50)
+        plt.hist(values, bins=50)
         plt.grid(True)
 
         # Saving/rendering plots

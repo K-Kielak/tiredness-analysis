@@ -5,8 +5,9 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 from tiredness_analysis.config import ANALYSIS_OUTPUT_DIR, BATCH_SIZE
-from tiredness_analysis.config import FRAMES_TO_SKIP, LOGGING_LEVEL
-from tiredness_analysis.config import RENDER_FIGS, VIDS_TO_ANALYZE
+from tiredness_analysis.config import DATA_FILEPATH, FRAMES_TO_SKIP
+from tiredness_analysis.config import LOGGING_LEVEL, RENDER_FIGS
+from tiredness_analysis.config import VIDS_TO_ANALYZE
 from tiredness_analysis.videos_analyzer import VideoAnalyzer
 
 
@@ -21,8 +22,8 @@ def main():
     os.mkdir(ANALYSIS_OUTPUT_DIR)
     videos_analyzer = VideoAnalyzer(BATCH_SIZE)
     analyzed_data = videos_analyzer.analyze_videos(VIDS_TO_ANALYZE,
-                                                   FRAMES_TO_SKIP)
-
+                                                   FRAMES_TO_SKIP,
+                                                   DATA_FILEPATH)
     _plot_data(analyzed_data,
                render_figs=RENDER_FIGS,
                output_dir=ANALYSIS_OUTPUT_DIR)

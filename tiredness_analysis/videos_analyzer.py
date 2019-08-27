@@ -1,4 +1,6 @@
+import csv
 import logging
+import os
 import sys
 import time
 
@@ -30,7 +32,7 @@ class VideoAnalyzer:
         self._data = {}
         self._last_vid_end_timespan = 0
 
-    def analyze_videos(self, vids_paths, frames_to_skip=1):
+    def analyze_videos(self, vids_paths, frames_to_skip=1, data_path=None):
         """
         Analyzes videos and returns the results of the analysis. Assumes
         that passed videos are single, distinct chunk of recording and are
@@ -39,15 +41,20 @@ class VideoAnalyzer:
         :param frames_to_skip: int, how many frames should be skipped in
             in between successfuly analyzed frames. Can be used to trade-off
             quality of analysis for performance/data usage.
+        :param data_path: file path where the freshly extracted data from the
+            videos should be saved. If file exists, it will be used to load
+            the data instead of processing the videos frame by frame. None if
+            data should be neither saved nor loaded.
         :return: The necessary results of analysis - eyes closedness and pose
             projection error.
         """
         self._reset()
-        for filepath in vids_paths:
-            logger.info(f'Analyzing video {filepath}...')
-            with VideoGenerator(filepath, frames_to_skip) as video:
-                self._analyze_video(video)
-            logger.info(f'Analyzing video {filepath} has finished.')
+        if data_path is not None and os.path.exists(data_path):
+            self._load_data(data_path)
+        else:
+            self._process_videos(vids_paths, frames_to_skip)
+            if data_path is not None:
+                self._save_data(data_path)
 
         logger.info('Extracting information from all videos has finished.')
         logger.info('Starting blinks calculation...')
@@ -57,6 +64,38 @@ class VideoAnalyzer:
         self._calc_blinks_data(RIGHT_EYE_PREFIX)
         logger.info('Blinks calculation has finished')
         return self._data
+
+    def _load_data(self, data_path):
+        logger.info(f'Loading data from {data_path}...')
+        with open(data_path, 'r') as datafile:
+            reader = csv.reader(datafile)
+            for t, lc, rc, err in reader:
+                t = float(t)
+                self._data['left_eye_closedness'].append((t, float(lc)))
+                self._data['right_eye_closedness'].append((t, float(rc)))
+                self._data['pose_reprojection_err'].append((t, float(err)))
+        logger.info('Loading data has finished.')
+
+    def _save_data(self, data_path):
+        logger.info(f'Saving data to {data_path}...')
+        with open(data_path, 'w') as datafile:
+            writer = csv.writer(datafile)
+            data_to_save = zip(
+                self._data['left_eye_closedness'],
+                self._data['right_eye_closedness'],
+                self._data['pose_reprojection_err']
+            )
+            for lc, rc, err in data_to_save:
+                timespan = lc[0]  # == rc[0] == err[0]
+                writer.writerow((timespan, lc[1], rc[1], err[1]))
+        logger.info(f'Saving data has finished.')
+
+    def _process_videos(self, vids_paths, frames_to_skip):
+        for filepath in vids_paths:
+            logger.info(f'Analyzing video {filepath}...')
+            with VideoGenerator(filepath, frames_to_skip) as video:
+                self._analyze_video(video)
+            logger.info(f'Analyzing video {filepath} has finished.')
 
     def _analyze_video(self, video):
         self._processor.reset()

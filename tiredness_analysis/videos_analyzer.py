@@ -140,7 +140,7 @@ class VideoAnalyzer:
             curr_blink_start = blinks[i].get_time_range()[0]
             self._data[f'{prefix}blink_lengths']\
                 .append((curr_blink_start, blinks[i].get_duration()))
-            self._data[f'{prefix}blink_frequency']\
+            self._data[f'{prefix}time_between_blinks']\
                 .append((prev_blink_end, curr_blink_start - prev_blink_end))
 
     def _reset(self):
@@ -150,8 +150,8 @@ class VideoAnalyzer:
             'right_eye_closedness': [],
             'pose_reprojection_err': [],
             'left_blink_lengths': [],
-            'left_blink_frequency': [],
+            'left_time_between_blinks': [],
             'right_blink_lengths': [],
-            'right_blink_frequency': []
+            'right_time_between_blinks': []
         }
         self._last_vid_end_timespan = 0

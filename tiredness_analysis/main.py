@@ -16,6 +16,8 @@ logger = logging.getLogger(__name__)
 
 SUBPLOT_NROWS = 1
 SUBPLOT_NCOLS = 2
+VARIANCE_OPACITY = 0.5
+MOVING_STATS_POINTS = 10
 
 
 def main():
@@ -42,6 +44,15 @@ def _plot_data(data_dict, render_figs=True, output_dir=None):
     for i, (key, data) in enumerate(data_dict.items()):
         timespans, values = zip(*data)  # unzip list of tuples
 
+        # Calculate moving stats and trends
+        moving_mean, moving_std = _calc_moving_stats(values)
+        std_above = moving_mean + moving_std
+        std_below = moving_mean - moving_std
+        mvstats_timespans = timespans[len(timespans) - len(moving_mean):]
+        mean_trend = np.poly1d(np.polyfit(mvstats_timespans, moving_mean, 1))
+        std_above_trend = np.poly1d(np.polyfit(mvstats_timespans, std_above, 1))
+        std_below_trend = np.poly1d(np.polyfit(mvstats_timespans, std_below, 1))
+
         plt.figure(key, figsize=(12.8, 4.8))
         plt.suptitle(key)
 
@@ -50,19 +61,18 @@ def _plot_data(data_dict, render_figs=True, output_dir=None):
         plt.title('values')
         plt.xlabel('time')
         plt.ylabel('value')
-        linear_trend = np.poly1d(np.polyfit(timespans, values, 1))
-        quadratic_trend = np.poly1d(np.polyfit(timespans, values, 2))
-        cubic_trend = np.poly1d(np.polyfit(timespans, values, 3))
-        quintic_trend = np.poly1d(np.polyfit(timespans, values, 5))
-        plt.plot(timespans, values, 'b.', label='data', markersize=1)
-        plt.plot(timespans, linear_trend(timespans),
-                 '--r', label='linear trend')
-        plt.plot(timespans, quadratic_trend(timespans),
-                 '--g', label='quadratic trend')
-        plt.plot(timespans, cubic_trend(timespans),
-                 '--y', label='cubic trend')
-        plt.plot(timespans, quintic_trend(timespans),
-                 '--k', label='quintic trend')
+        plt.ylim(np.min(values), np.max(values))
+        plt.plot(timespans, values, 'b.', zorder=0, label='data', markersize=1)
+        plt.fill_between(mvstats_timespans, std_below, std_above, zorder=1,
+                         facecolor='r',  alpha=1 - VARIANCE_OPACITY)
+        plt.plot(mvstats_timespans, std_above_trend(mvstats_timespans), 'k:',
+                 zorder=2)
+        plt.plot(mvstats_timespans, std_below_trend(mvstats_timespans), 'k:',
+                 zorder=2, label='std trends')
+        plt.plot(mvstats_timespans, mean_trend(mvstats_timespans), 'k--',
+                 zorder=2, label='trend')
+        plt.plot(mvstats_timespans, moving_mean, 'r-', zorder=3,
+                 label='moving mean')
         plt.legend(loc='best')
         plt.grid(True)
 
@@ -80,6 +90,29 @@ def _plot_data(data_dict, render_figs=True, output_dir=None):
             plt.savefig(fig_path)
         if render_figs:
             plt.show()
+
+
+def _calc_moving_stats(data):
+    window_size = len(data) // MOVING_STATS_POINTS
+    stats_length = len(data) - window_size + 1
+    mean = np.zeros(stats_length)
+    variance = np.zeros(stats_length)
+
+    # Calc initial window
+    mean[0] = np.mean(data[:window_size])
+    variance[0] = np.var(data[:window_size])
+
+    # Calculate following windows reusing the initial one
+    for i in range(1, stats_length):
+        new_x = data[i + window_size - 1]
+        old_x = data[i - 1]
+        mean_change = (new_x-old_x) / window_size
+        mean[i] = mean[i - 1] + mean_change
+        variance_change = (new_x-old_x) * (new_x-mean[i] + old_x-mean[i - 1])
+        variance_change = variance_change / window_size
+        variance[i] = variance[i - 1] + variance_change
+
+    return mean, np.sqrt(variance)
 
 
 if __name__ == '__main__':

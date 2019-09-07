@@ -18,6 +18,7 @@ SUBPLOT_NROWS = 1
 SUBPLOT_NCOLS = 2
 VARIANCE_OPACITY = 0.5
 MOVING_STATS_POINTS = 10
+OUTLIERS_THRESHOLD_COEFF = 3
 
 
 def main():
@@ -53,6 +54,9 @@ def _plot_data(data_dict, render_figs=True, output_dir=None):
         std_above_trend = np.poly1d(np.polyfit(mvstats_timespans, std_above, 1))
         std_below_trend = np.poly1d(np.polyfit(mvstats_timespans, std_below, 1))
 
+        # Find maximum and minimum values (excluding outliers) to limit plots
+        min_plot_val, max_plot_val = _find_min_max_excuding_outliers(values)
+
         plt.figure(key, figsize=(12.8, 4.8))
         plt.suptitle(key)
 
@@ -61,7 +65,7 @@ def _plot_data(data_dict, render_figs=True, output_dir=None):
         plt.title('values')
         plt.xlabel('time')
         plt.ylabel('value')
-        plt.ylim(np.min(values), np.max(values))
+        plt.ylim(min_plot_val, max_plot_val)
         plt.plot(timespans, values, 'b.', zorder=0, label='data', markersize=1)
         plt.fill_between(mvstats_timespans, std_below, std_above, zorder=1,
                          facecolor='r',  alpha=1 - VARIANCE_OPACITY)
@@ -81,7 +85,7 @@ def _plot_data(data_dict, render_figs=True, output_dir=None):
         plt.title('histogram')
         plt.xlabel('value')
         plt.ylabel('frequency')
-        plt.hist(values, bins=50)
+        plt.hist(values, bins=50, range=(min_plot_val, max_plot_val))
         plt.grid(True)
 
         # Saving/rendering plots
@@ -113,6 +117,22 @@ def _calc_moving_stats(data):
         variance[i] = variance[i - 1] + variance_change
 
     return mean, np.sqrt(variance)
+
+
+def _find_min_max_excuding_outliers(values):
+    std = np.std(values)
+    mean = np.mean(values)
+    min_val = mean
+    max_val = mean
+    max_distace_from_mean = std * OUTLIERS_THRESHOLD_COEFF
+    for v in values:
+        if v > max_val and max_val - mean < max_distace_from_mean:
+            max_val = v
+
+        if v < min_val and mean - min_val < max_distace_from_mean:
+            min_val = v
+
+    return min_val, max_val
 
 
 if __name__ == '__main__':

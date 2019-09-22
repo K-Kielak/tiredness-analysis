@@ -48,7 +48,6 @@ NREM can then be subdivided three stages by using brain waves data from electroe
 	- Stage 1: Awake to Asleep transition (drowsy)
 	- Stage 2: Light Sleep
 	- Stage 3: Deep Sleep
-	
 
 Drowsiness detection methods typically attempt at detecting the early stages of NREM. 
 
@@ -73,7 +72,7 @@ digraph Figure1 {
 ```
 **Figure 1.** A general diagrammatic representation of the drowsiness analysis process. When data is recorded, it is then preprocessed and used for drowsiness analysis. The process is usually repeated over time (dashed line labeled `t`). 
 
-This process is adapted in different ways depending on the type of data being collected, which is either: subjective, vehicle-based, image-based or physiological. 
+This process is adapted in different ways depending on the type of data being collected, which is either: subjective, vehicle-based, behavioural or physiological. 
 
   - **Existing Approaches (and why they are bad)**
 
@@ -119,28 +118,45 @@ Typically, these two phases alternate each other in drowsy individual, right bef
 
 Other measures that can be calculated from steering sensors are the Standard Deviation of Angular Velocity (SDAV) of the steering wheel and the proportion of STeering wheel movements EXceeding Three degrees (STEX3). These are highly correlated to Psychomotor Vigilance Tests and the KSS scale (Forsman et al., 2013). 
 
-These sensors work well with steering angles between 0.5° - 5.0°  . Steering Wheel Metrics are too dependent on roads with specific geometries and may be affected by the vehicle kinetics in particular environments (Eskandarian et al., 2007). Additionally, monotonous roads such as straight roads, provide little to no variation to be detected  which may result in drowsiness not being detected. Monotonous roads are also among the roads with the highest number of accidents so this solution might not be as accurate as others (Eskandarian et al., 2007).
+These sensors work optimally with steering angles between 0.5° - 5.0°  and they are also relatively easy to install on vehicles. Steering wheel metrics however, are too dependent on roads with specific geometries and may be affected by the vehicle kinetics in particular environments (Eskandarian et al., 2007).          Additionally, monotonous roads such as straight roads, provide little to no variation to be detected  which may result in drowsiness not being detected. Steering wheel sensors may also fail to detect changes in relatively straight roads or highly trafficked roads, which are among the roads with the highest number of accidents (Eskandarian et al., 2007).
 
+### Lane Position Sensors 
 
-- Lateral lane position
-- Steering wheel variability 
-- Steering wheel three degree angle  
+ Lane position sensors involve a combination of an external camera and lane-tracking algorithms. Then, the position of the vehicle can be calculated with respect to the lanes (Ingre et al., 2006). 
+ 
+ Patterns that can be calculated from this type of data are: Standard Deviation of Lane Position (SDLP), Lateral Lane Position and the Frequency of Abnormal Lane Deviation (Ingre et al., 2006; Cheng et al., 2012; Sun et al., 2017).  In their research, Ingre et al. (2006) found significant correlation between the KSS scale and both the SDLP (Figure #todo) and the blink duration (discussed in the next section).
+ 
+/img/lane_position.png
 
-## 2.3 Image-Based Measures
+**Figure** #todo . Positive correlation between the Standard Deviation of Lane Position (SDLP) and the Karolinska Sleepiness Scale (KSS) (n = 20). The estimated fixed effect (thick) shows a peak in drowsiness (KSS 8-9) between SDLP of 0.36 and 0.40.
 
-- Eyes
-	- Perclos
-	- Average Eye Closure Speed
-	- Delay of eyelid reopening
-- Blinks
-	- Blink Frequency
-	- Blink Duration
-- Gaze
-	- Eye Gaze
-- Mouth
-	- Mouth Openness
+ Limitations of this method include the dependency on road marks for lane detection, lighting and weather conditions (Sahayadhas et al., 2012). Additionally, the decrease in driving performance may not be uniquely due to drowsiness. An alternative root cause for example, may be the driver’s years of experience which may directly impact the driving performance.
+ 
+## 2.3 Behavioural Measures
 
-Image based techniques involve a device that records the drivers face. A set of features are extracted from the pictures which can be correlated to tiredness, such as for example, eyes closed for a prolonged period of time. 
+Behavioural measures attempt at identifying behaviours associated with drowsiness. Behavioural measures usually rely on a camera that records the drivers face. A set of features are extracted from the pictures which can be correlated to drowsiness, such as for example, closed eyes for a prolonged period of time. 
+
+The majority of the features correlated with drowsiness are obtained from the head, the mouth or the eyes.
+
+### Head Features 
+
+Drowsy drivers seem to sway their heads (Sahayadhas et al., 2012), increase nodding, scratch their face more frequently and more prone to rotate their heads to the left to relieve tension on the neck (Eskandarian et al., 2007). The head position can also be used to calculate the slouching and posture adjustment frequency. The features involving rotations are quantifiable with available face detection methods (#todo CITE). Other behaviours like scratching may be harder to quantify and may not be consistent across different individuals. 
+
+### Mouth Features 
+
+Yawns are the most common mouth features correlated with drowsiness. This is usually measured as the degree of mouth openness which will vary if the driver is normal, drowsy or just talking (Wang et al., 2006). 
+
+### Eyes Features 
+
+Eyes, and more specifically blinking, have been studied extensively for drowsiness detection. The most commonly used approach is PERCLOS, the PERcentage of eyes CLOSure over a time period and has been shown to be very effective in drowsiness detection (Sahayadhas et al., 2012). A more recent study by Trutschel et al. (2017) however, challenged the effectiveness of PERCLOS and commercially available PERCLOS-based systems. In a trial with three commercial systems, PERCLOS had a higher error rate in drowsiness detection of about 10% compared to EEG data (Trutschel et al., 2017). This has been associated episodes of microsleep events where drivers are asleep with their eyes open which PERCLOS fails to address (Trutschel et al., 2017)
+
+Alternative eye features correlated with drowsiness include the Average Eye Closure Speed (AECS), Blink Frequency and Duration and pupil diameter (Wang et al., 2006). Additionally, eye gaze can also be extracted to verify whether the driver is looking at the road ahead (Wang et al., 2006).
+
+#todo picture of blinks or some other picture
+
+Once these features are extracted, a threshold is set to classify the driver as drowsy or not. Given that most of these features rely on a temporal dimension, they tend to perform better when used for a longer period of time (Wilkinson et al., 2013). 
+
+The main limitation of behavioural approaches is the camera as it is significantly affected by the light conditions. This has partially been minimised by the addition of an infrared camera(Sahayadhas et al., 2012). However, the systems may still be sensitive to sudden changes in illumination or dust accumulating on the camera sensor which may affect the feature detection steps.
 
 ## 2.4 Physiological Measures: 
 - EEG
@@ -208,3 +224,9 @@ Hu 2009 https://dl.acm.org/citation.cfm?id=1508574
 Sayed 2001 - https://journals.sagepub.com/doi/10.1243/0954407011528536
 
 Forsman 2013 - https://www.sciencedirect.com/science/article/pii/S0001457512001571
+ingre 2006 https://www.ncbi.nlm.nih.gov/pubmed/16490002
+cheng et al 2012 https://onlinelibrary.wiley.com/doi/abs/10.1002/hfm.20395
+wang et al 2006 - https://ieeexplore.ieee.org/abstract/document/1713656
+
+wilinkson 2013 https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3836343/
+Trutschel 2017  10.17077/drivingassessment.1394

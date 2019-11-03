@@ -2,11 +2,11 @@
 
 {{TOC}}
 
-### Guide: asdasd
+### Guide:
 
 ```
 *Bold*: Looking for a better word.
-#TODO: Must be fixed\
+#TODO: Must be fixed
 `Comments`
 ```
 
@@ -158,12 +158,17 @@ Once these features are extracted, a threshold is set to classify the driver as 
 
 The main limitation of behavioural approaches is the camera as it is significantly affected by the light conditions. This has partially been minimised by the addition of an infrared camera(Sahayadhas et al., 2012). However, the systems may still be sensitive to sudden changes in illumination or dust accumulating on the camera sensor which may affect the feature detection steps.
 
-## 2.4 Physiological Measures: 
-- EEG
-- ECG
-- Heart Rate
+## 2.4 Biological Measures: 
+
+Biological measures focus on the detecting significant changes in physiological signals as measured by electrocardiogram (ECG),   electroencephalogram (EEG), electro-oculography (EOG), surface electromyogram (sEMG) (Dong et al., 2011). 
+
+EEG has been studied extensively, as it detects brain waves related to sleep (Qiong et al., 2006). Drowsiness is usually correlated with an increase of a continuous signal of α and θ waves compared to β waves, detectable with the formula (α + θ)/β (Dong et al., 2011). Although very accurate, EEG measurements are very invasive, consisting in electrodes in contact with the skin (Dong et al., 2011). Nonetheless it has been very useful to evaluate other measures of drowsiness such as Standard Deviation of Steering Wheel Angle and Lateral Lane Position (Boyle et al., 2008). 
    
-   3. Recommended (*our*) Solution 
+   
+   
+   
+   
+   3. Recommended Hybrid (*our*) Solution 
       
       - Must be in generic terms as it aims at educating rather than selling
    4. Case Study / Statistics (optional)
@@ -230,3 +235,9 @@ wang et al 2006 - https://ieeexplore.ieee.org/abstract/document/1713656
 
 wilinkson 2013 https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3836343/
 Trutschel 2017  10.17077/drivingassessment.1394
+
+Dong, Y., Hu, Z., Uchimura, K., & Murayama, N. (2011). Driver Inattention Monitoring System for Intelligent Vehicles: A Review. IEEE Transactions on Intelligent Transportation Systems, 12(2), 596–614. doi:10.1109/tits.2010.2092770
+
+Qiong Wang, Jingyu Yang, Mingwu Ren, & Yujie Zheng. (2006). Driver Fatigue Detection: A Survey. 2006 6th World Congress on Intelligent Control and Automation. doi:10.1109/wcica.2006.1713656
+
+boyle et al 2008 10.1016/j.trf.2007.08.001

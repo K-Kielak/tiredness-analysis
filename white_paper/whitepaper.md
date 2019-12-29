@@ -2,17 +2,19 @@
 
 {{TOC}}
 
-### Guide:
-
-```
-*Bold*: Looking for a better word.
-#TODO: Must be fixed
-`Comments`
-```
-
 ### Outline:
 
 1. **Summary / Synopsis**
+	1. Summary
+	2. About 
+	      - Brief Description of company + website 
+	      - Names (+ descriptions optionally) of the researchers.
+
+|  |  |
+|:--|:--|
+| **Leonardo Castorina** - CEO | Leonardo studied Biochemistry at The University of Edinburgh. He interned at the Swiss Institute of Bioinformatics, P&G and IBM where he worked with the UK Police Force on optimizing the search for vulnerable missing people using machine learning methods. He is interested in the use of machine learning for protein design for medical biosensors, computer vision and data mining .|
+| **Kacper Kielak** - CTO | Kacper studied Computer Science and AI at the University of Birmingham. He interned at Amazon Alexa and JPMorgan where he developed novel NLP and machine learning solutions. During his studies, he topped the class every single year, and successfully sold two machine learning side-projects. His main passion is reinforcement learning. |
+| **Karolis Spukas** - VP of Tech  | Karolis Computer Science and AI at The University of Edinburgh. He interned at KAL where he worked on cryptography and on the new generation of ATMs and JP Morgan. He is passionate about computer vision for autonomous vehicles, inferring object poses from video input, security and systems architecture. |
 
 2. **Introduction to the problem**
    
@@ -29,17 +31,15 @@ Additionally, drowsiness has been demonstrated to severely impair driving perfor
 Predicting dangerous levels of tiredness and preventing vehicle crashes or accidents offer a business opportunity to produce safer vehicles, decrease insurance costs as well as possibly saving lives. 
 
 The automotive industry has reacted to the drowsiness problem by introducing drowsiness-detection systems. These systems consider  four main categories of patterns:
-#TODO subjective, vehicle, face/eyes and other physiological patterns. 
+#TODO: fix order subjective, vehicle, face/eyes and other physiological patterns. 
 
    3. **Problem Statement** 
 
-This paper will consider existing approaches and patterns for drowsiness detection as well as their effectiveness, and provides a `Try to soft sell your solution`
-
+This white paper analyses the current research available on patterns of drowsiness that can lead to vehicle accidents, as well as current and future solutions to the problem. 
 
 3. **Detection (Review)**
    
-   
-   1. **The biology of tiredness**
+   1. **Causes of drowsiness**
 
 Drowsiness is the tendency of an individual to fall asleep. There are three main phases of sleep: awake, Non-Rapid Eye Movement (NREM) sleep and Rapid Eye Movement (REM) sleep. 
 
@@ -51,9 +51,9 @@ NREM can then be subdivided three stages by using brain waves data from electroe
 
 Drowsiness detection methods typically attempt at detecting the early stages of NREM. 
 
-Drowsiness-related accidents show recurring characteristics. They occur primarily late at night (0:00 AM – 7:00 AM) or in the early afternoon (2:00 PM – 4:00 PM). Usually there are no signs of vehicle defects or breaks usage and the weather conditions are generally good with clear visibility (Sahayadhas et al., 2012). 
+Drowsiness-related accidents show recurring characteristics. They occur primarily late at night (0:00 AM – 7:00 AM) or in the early afternoon (2:00 PM – 4:00 PM). Usually there are no signs of vehicle defects or breaks usage and the weather conditions are generally good with clear visibility (Sahayadhas et al., 2012). Studies by Philip et al. (2005) and Thiffault et al. (2001) have identified the monotony of the road environment  as a possible trigger for drowsiness. Moreover, signs of drowsiness based on the drivers performance can be observed within 20-25 minutes of driving (Philip et al., 2005).
 
-Additionally, studies by Philip et al. (2005) and Thiffault et al. (2001) have identified the monotony of the road environment  as a possible trigger for drowsiness. Moreover, signs of drowsiness based on the drivers performance can be observed within 20-25 minutes of driving (Philip et al., 2005).
+Additionally, the European Road Safety Observatory identified the lack of sleep, time spent on a task, monotony of the road and the internal body clock, as main sources of drowsiness that can lead to fatal accidents (European Commision, 2018).
 
    2. **Drowsiness Measurement Techniques**  
       
@@ -162,60 +162,58 @@ The main limitation of behavioural approaches is the camera as it is significant
 
 Biological measures focus on the detecting significant changes in physiological signals as measured by electrocardiogram (ECG),   electroencephalogram (EEG), electro-oculography (EOG), surface electromyogram (sEMG) (Dong et al., 2011). 
 
-EEG has been studied extensively, as it detects brain waves related to sleep (Qiong et al., 2006). Drowsiness is usually correlated with an increase of a continuous signal of α and θ waves compared to β waves, detectable with the formula (α + θ)/β (Dong et al., 2011). Although very accurate, EEG measurements are very invasive, consisting in electrodes in contact with the skin (Dong et al., 2011). Nonetheless it has been very useful to evaluate other measures of drowsiness such as Standard Deviation of Steering Wheel Angle and Lateral Lane Position (Boyle et al., 2008). 
+EEG has been studied extensively, as it detects brain waves related to sleep (Qiong et al., 2006). Drowsiness is usually correlated with an increase of a continuous signal of α and θ waves compared to β waves, detectable with the formula (α + θ)/β (Dong et al., 2011). Although very accurate, EEG measurements are very invasive, consisting in electrodes in contact with the skin (Dong et al., 2011). Nonetheless it has been very useful to evaluate other patterns of drowsiness such as Standard Deviation of Steering Wheel Angle and Lateral Lane Position (Boyle et al., 2008). 
+
+
+## 3. Hybrid Solutions
+
+Theoretically, combining information about the driver physical state and the driving performance should improve the confidence of the detected fatigue (Dong et al., 2011). Hybrid solutions consider multiple patterns of drowsiness, such as the ones previously outlined, to refine the confidence of the prediction.
+
+As an example, Eskandarian et al. (2007) analysed driving data from 20 subjects over a period of two days. The study identified correlations between PERCLOS, Steering Wheel Angle, Lateral Displacement of the vehicle and vehicle crash accidents (Eskandarian et al., 2007). A neural network model trained on all of these patterns achieved a larger accuracy with a lower false-positive signals compared to just considering one pattern (Eskandarian et al., 2007).
+
+#todo : maybe add more info on hybrid?
+
+Neural networks are therefore suitable candidates for drowsiness detection solutions for three main reasons: personalization, accuracy and versatility.
+
+- **Personalization:** Unlike many patterns of tiredness described earlier such as PERCLOS, they do not rely on specific values to determine the drowsiness. Instead, neural networks are able to *learn* drowsiness-specific patterns on a driver-to-driver basis, taking into account variations in the individuals.  
+
+- **Accuracy:** Additionally, neural networks are able to improve their accuracy as more data from the driver is obtained compared to other algorithms. Their great versatility also allows them 
+
+- **Versatility:** Due to their modular architecture, neural networks allow for multiple sources of data to be used, as in the case of Eskandarian et al. (2007). Additionally, this allows adaptation to data from new sensors that may be developed in the future. 
+
+In terms of drawbacks, neural networks generally take a longer development time, as they need to be trained with appropriate datasets and require hyperparameters tuning. Additionally, neural networks are black-boxed methods, meaning it may be complex to understand how a neural network arrived to its conclusions. Finally, neural networks are resource intensive which means they require high computational power to be trained.  
+
+Osmitau Technologies however, is tackling these problems to create a hybrid solution called Teyered, powered by neural networks:
+
+- **Development Time**: Osmitau’s team has had extensive experience in the fields of machine learning and data analysis, working at companies such as IBM, JPMorgan and Amazon. They take care of the development for you.
+
+- **Black Box**: Teyered does not uniquely rely on neural networks. Teyered exploits advanced statistical methods to extract relevant patterns from drivers’ data, and couples them with an efficient neural network to determine the drowsiness state of the driver.
+
+- **Computational Power:** Osmitau takes care of the computational resources required for training the neural network by using the best high performance cloud computing platforms provided by Google (GCP) and Amazon (AWS). This guarantees fast training times and immediate availability of resources. 
+
+## 4. Conclusion
    
+   Drowsiness on the wheel is one of the main causes of deadly accidents every year (AAA, 2010). Drowsiness also manifests itself in several detectable patterns which are used in current drowsiness-detection systems. 
    
+   The patterns most correlated with drowsiness involve vehicle sensors such as steering wheel angle and driver’s behaviour such as blinking rate. 
    
+   Other physiological patterns such as EEG waves, although accurate, are invasive to the driver but can be used as a baseline to validate other patterns of tiredness. 
    
+   The most accurate methods for drowsiness detection involve the use of multiple patterns. This can be done using a statistical approach, a neural-network approach or a combination of the two. 
+         
+  Osmitau Technologies is currently building Teyered: a hybrid solution for drowsiness detection powered by neural networks. By embracing state-of-the-art machine learning techniques and advanced statistical methods, Teyered aims at detecting drowsiness with a much greater accuracy by building a personalized and versatile system. Teyered’s goal is to improve vehicle safety and prevent 
+
+### Where to find more information
+  
+  You can find out more about our company and our services at [www.osmitau.com](www.osmitau.com). We offer consulting services for AI and Machine Learning and can help you with tackle complex problmes that require optimal solutions. 
+  
+  Osmitau is aiming to release Teyered in June 2020. You can join our newsletter (we don’t spam, unlike the big guys).
+
+#todo Add newsletter
+
+ Or you can email us at: hello@osmitau.com (we are quite nice too :P) 
    
-   3. Recommended Hybrid (*our*) Solution 
-      
-      - Must be in generic terms as it aims at educating rather than selling
-   4. Case Study / Statistics (optional)
-
-4. **Conclusion**
-   
-   1. Ideal Solution Characteristics (bullet points / table)
-      
-      - Most important part of white paper. 
-      
-      - Must set distance from competition without sounding like a pitch
-      
-      - The name of our solution must be mentioned after the bullet points
-   
-   2. Call to Action
-      
-      - Where to find more information
-      
-      - Next steps of buying process
-   
-   3. About 
-      
-      - Brief Description of company + website 
-      
-      - Names (+ descriptions optionally) of the researchers.
-
-
-
-
-
-
-
----- Text that can be useful but likely unusable ---- 
-
-Tiredness on the wheel is the cause of TODO number of accidents every year and endangers the lives of both drivers and pedestrians (TODO: Add citation). 
-
-Since the past years, the automotive industry has attempted to tackle this issue with drowsiness-detection systems that have been embedded in vehicles. These systems are however outdated, and recent advances in machine learning have allowed the detection of more complex and personalized patterns of tiredness. 
-
-Osmitau Technologies **delivers** Teyered, an adaptable drowsiness-detection systems that uses state-of-the-art techniques to prevent road accidents. 
-
-This offers an opportunity to provide customers with safer vehicles 
-
-Teyered combines different sources of inputs, learns new patterns and adapts to the driver.
-
-
-
-Sources: 
+# References: 
 
 AAA 2010 - https://aaafoundation.org/prevalence-impact-drowsy-driving/
 Leger 1994 - https://academic.oup.com/sleep/article/17/1/84/2749451
@@ -239,5 +237,8 @@ Trutschel 2017  10.17077/drivingassessment.1394
 Dong, Y., Hu, Z., Uchimura, K., & Murayama, N. (2011). Driver Inattention Monitoring System for Intelligent Vehicles: A Review. IEEE Transactions on Intelligent Transportation Systems, 12(2), 596–614. doi:10.1109/tits.2010.2092770
 
 Qiong Wang, Jingyu Yang, Mingwu Ren, & Yujie Zheng. (2006). Driver Fatigue Detection: A Survey. 2006 6th World Congress on Intelligent Control and Automation. doi:10.1109/wcica.2006.1713656
-
+Eskandarian et al. 2007 10.1037/e563992012-001
 boyle et al 2008 10.1016/j.trf.2007.08.001
+European Commission, Fatigue, European Commission, Directorate General for Transport, February 2018
+
+https://ec.europa.eu/transport/road_safety/sites/roadsafety/files/pdf/ersosynthesis2018-fatigue.pdf

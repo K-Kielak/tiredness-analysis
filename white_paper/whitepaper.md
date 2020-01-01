@@ -140,7 +140,7 @@ The majority of the features correlated with drowsiness are obtained from the he
 
 ### Head Features 
 
-Drowsy drivers seem to sway their heads (Sahayadhas et al., 2012), increase nodding, scratch their face more frequently and more prone to rotate their heads to the left to relieve tension on the neck (Eskandarian et al., 2007). The head position can also be used to calculate the slouching and posture adjustment frequency. The features involving rotations are quantifiable with available face detection methods (#todo CITE). Other behaviours like scratching may be harder to quantify and may not be consistent across different individuals. 
+Drowsy drivers seem to sway their heads (Sahayadhas et al., 2012), increase nodding, scratch their face more frequently and more prone to rotate their heads to the left to relieve tension on the neck (Eskandarian et al., 2007). The head position can also be used to calculate the slouching and posture adjustment frequency. The features involving rotations are quantifiable with available face detection methods (Eskandarian et al., 2007). Other behaviours like scratching may be harder to quantify and may not be consistent across different individuals. 
 
 ### Mouth Features 
 

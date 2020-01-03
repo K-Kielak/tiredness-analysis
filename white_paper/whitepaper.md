@@ -5,33 +5,33 @@
 ### Outline:
 
 1. **Summary / Synopsis**
-	1. Summary
-	2. About 
-	      - Brief Description of company + website 
-	      - Names (+ descriptions optionally) of the researchers.
+    1. Summary
+    2. About 
+          - Brief Description of company + website 
+          - Names (+ descriptions optionally) of the researchers.
 
 |  |  |
 |:--|:--|
-| **Leonardo Castorina** - CEO | Leonardo studied Biochemistry at The University of Edinburgh. He interned at the Swiss Institute of Bioinformatics, P&G and IBM where he worked with the UK Police Force on optimizing the search for vulnerable missing people using machine learning methods. He is interested in the use of machine learning for protein design for medical biosensors, computer vision and data mining .|
+| **Leonardo Castorina** - CEO | Leonardo studied Biochemistry at The University of Edinburgh. He interned at the Swiss Institute of Bioinformatics, P&G and IBM where he worked with the UK Police Force on optimizing the search for vulnerable missing people using machine learning methods. He is interested in the use of machine learning for protein design for medical biosensors, computer vision, and data mining .|
 | **Kacper Kielak** - CTO | Kacper studied Computer Science and AI at the University of Birmingham. He interned at Amazon Alexa and JPMorgan where he developed novel NLP and machine learning solutions. During his studies, he topped the class every single year, and successfully sold two machine learning side-projects. His main passion is reinforcement learning. |
-| **Karolis Spukas** - VP of Tech  | Karolis Computer Science and AI at The University of Edinburgh. He interned at KAL where he worked on cryptography and on the new generation of ATMs and JP Morgan. He is passionate about computer vision for autonomous vehicles, inferring object poses from video input, security and systems architecture. |
+| **Karolis Spukas** - VP of Tech  | Karolis Computer Science and AI at The University of Edinburgh. He interned at KAL where he worked on cryptography and the new generation of ATMs and JP Morgan. He is passionate about computer vision for autonomous vehicles, inferring object poses from video input, security, and systems architecture. |
 
 2. **Introduction to the problem**
    
    1. **General Research about Problem**
 
-Safety is the most essential priority while driving. Drowsiness on the wheel however,  endangers both drivers and pedestrians and is  among the leading causes for car accidents. About 17% of fatal traffic accidents are estimated to be due to tiredness (AAA, 2010) which results in an estimated yearly cost of $43.15 - $56.02 billion in the United States alone (Leger, 1994). 
+Safety is the most essential priority while driving. Drowsiness on the wheel, however,  endangers both drivers and pedestrians and is among the leading causes of car accidents. About 17% of fatal traffic accidents are estimated to be due to tiredness (AAA, 2010) which results in an estimated yearly cost of $43.15 - $56.02 billion in the United States alone (Leger, 1994). 
 
 #todo Change figures or improve wordings
 
-Additionally, drowsiness has been demonstrated to severely impair driving performance. On average, tired drivers perform worse than alcohol-intoxicated individuals with blood alcohol concentration of 0.05% (Williamson et al., 2000). 
+Additionally, drowsiness has been demonstrated to severely impair driving performance. On average, tired drivers perform worse than alcohol-intoxicated individuals with a blood alcohol concentration of 0.05% (Williamson et al., 2000). 
    
    2. **Relating Back to industry (Loss to Stakeholders)**
 
 Predicting dangerous levels of tiredness and preventing vehicle crashes or accidents offer a business opportunity to produce safer vehicles, decrease insurance costs as well as possibly saving lives. 
 
 The automotive industry has reacted to the drowsiness problem by introducing drowsiness-detection systems. These systems consider  four main categories of patterns:
-#TODO: fix order subjective, vehicle, face/eyes and other physiological patterns. 
+#TODO: fix order subjective, vehicle, face/eyes, and other physiological patterns. 
 
    3. **Problem Statement** 
 
@@ -43,15 +43,15 @@ This white paper analyses the current research available on patterns of drowsine
 
 Drowsiness is the tendency of an individual to fall asleep. There are three main phases of sleep: awake, Non-Rapid Eye Movement (NREM) sleep and Rapid Eye Movement (REM) sleep. 
 
-NREM can then be subdivided three stages by using brain waves data from electroenephalograms (EEG) (Brodbeck et al., 2012):
+NREM can then be subdivided three stages by using brain waves data from electroencephalograms (EEG) (Brodbeck et al., 2012):
 
-	- Stage 1: Awake to Asleep transition (drowsy)
-	- Stage 2: Light Sleep
-	- Stage 3: Deep Sleep
+    - Stage 1: Awake to Asleep transition (drowsy)
+    - Stage 2: Light Sleep
+    - Stage 3: Deep Sleep
 
 Drowsiness detection methods typically attempt at detecting the early stages of NREM. 
 
-Drowsiness-related accidents show recurring characteristics. They occur primarily late at night (0:00 AM – 7:00 AM) or in the early afternoon (2:00 PM – 4:00 PM). Usually there are no signs of vehicle defects or breaks usage and the weather conditions are generally good with clear visibility (Sahayadhas et al., 2012). Studies by Philip et al. (2005) and Thiffault et al. (2001) have identified the monotony of the road environment  as a possible trigger for drowsiness. Moreover, signs of drowsiness based on the drivers performance can be observed within 20-25 minutes of driving (Philip et al., 2005).
+Drowsiness-related accidents show recurring characteristics. They occur primarily late at night (0:00 AM – 7:00 AM) or in the early afternoon (2:00 PM – 4:00 PM). Usually, there are no signs of vehicle defects or breaks usage and the weather conditions are generally good with clear visibility (Sahayadhas et al., 2012). Studies by Philip et al. (2005) and Thiffault et al. (2001) have identified the monotony of the road environment as a possible trigger for drowsiness. Moreover, signs of drowsiness based on the drivers' performance can be observed within 20-25 minutes of driving (Philip et al., 2005).
 
 Additionally, the European Road Safety Observatory identified the lack of sleep, time spent on a task, monotony of the road and the internal body clock, as main sources of drowsiness that can lead to fatal accidents (European Commision, 2018).
 
@@ -59,7 +59,7 @@ Additionally, the European Road Safety Observatory identified the lack of sleep,
       
       - **General Approach (and why they are bad)**
 
-Drowsiness detection systems generally consist of a device that is embedded in the vehicle and monitors the driver. The device captures data in the form of pictures from a camera or sensors such as steering wheel sensors. The data is then processed and analysed by an algorithm to measure the drowsiness level. This process can be repeated a multiple times for a certain length of time `t` (Figure 1). 
+Drowsiness detection systems generally consist of a device that is embedded in the vehicle and monitors the driver. The device captures data in the form of pictures from a camera or sensors such as steering wheel sensors. The data is then processed and analyzed by an algorithm to measure the drowsiness level. This process can be repeated multiple times for a certain length of time `t` (Figure 1). 
 
 /img/detection.png
 ```
@@ -72,13 +72,13 @@ digraph Figure1 {
 ```
 **Figure 1.** A general diagrammatic representation of the drowsiness analysis process. When data is recorded, it is then preprocessed and used for drowsiness analysis. The process is usually repeated over time (dashed line labeled `t`). 
 
-This process is adapted in different ways depending on the type of data being collected, which is either: subjective, vehicle-based, behavioural or physiological. 
+This process is adapted in different ways depending on the type of data being collected, which is either: subjective, vehicle-based, behavioral or physiological. 
 
   - **Existing Approaches (and why they are bad)**
 
 ## 2.1 Subjective Measures 
 
-Subjective measures involve the driver’s own assessment of their alertness level. The Karolinska Sleepiness Scale (KSS) is a nine-point scale and it is the most widely used scales to describe drowsiness (Shahid et al., 2011). Each rating of the KSS has an associated description as shown in Table 1.
+Subjective measures involve the driver’s assessment of their alertness level. The Karolinska Sleepiness Scale (KSS) is a nine-point scale and it is the most widely used scales to describe drowsiness (Shahid et al., 2011). Each rating of the KSS has an associated description as shown in Table 1.
 
 | Rating | Description |
 |:--|:--|
@@ -94,53 +94,53 @@ Subjective measures involve the driver’s own assessment of their alertness lev
 
 **Table 1.** The Karolinska Sleepiness Scale (KSS) with descriptions for each rating. 
 
-The KSS has been used to monitor the driver’s drowsiness level in driving simulations and compared to other sources of data such as EEG data (Hu et al., 2009) or Lane Position data (Sommer et al., 2010). The results however, were mixed and they largely depend on the driver’s consistence in the self-assessment. This method may not be consistent between different drivers and may also fail to capture sudden changes in drowsiness levels due to micro-sleep events (Sahayadhas et al., 2012). 
+The KSS has been used to monitor the driver’s drowsiness level in driving simulations and compared to other sources of data such as EEG data (Hu et al., 2009) or Lane Position data (Sommer et al., 2010). The results, however, were mixed and they largely depend on the driver’s consistency in the self-assessment. This method may not be consistent between different drivers and may also fail to capture sudden changes in drowsiness levels due to micro-sleep events (Sahayadhas et al., 2012). 
 
-An additional limitation it is difficult to inquire the driver while driving on a real road, and in addition to being a source of distraction, it may indirectly alert the driver, affecting their drowsiness level (Sahayadhas et al., 2012). 
+An additional limitation it is difficult to inquire about the driver while driving on a real road, and in addition to being a source of distraction, it may indirectly alert the driver, affecting their drowsiness level (Sahayadhas et al., 2012). 
 
 
 ## 2.2 Vehicle-Based Measures
 
-Vehicle-based measures aim at determining drowsiness level via the interaction between the driver and the vehicle. These usually involve sensors such as steering wheel sensors or lane position sensors. 
+Vehicle-based measures aim at determining the drowsiness level via the interaction between the driver and the vehicle. These usually involve sensors such as steering wheel sensors or lane position sensors. 
 
 ### Steering Wheel Sensors
 
-These sensors measure the change in angle of the steering wheel. There are two main phases of drowsiness that can be detected with steering wheel sensors: 
+These sensors measure the change in the angle of the steering wheel. There are two main phases of drowsiness that can be detected with steering wheel sensors: 
 
- - **Phase 1**: Early-stage drowsiness where the driver is unable to smoothly control the vehicle, with large manoeuvres to correct the vehicle position. This usually results in zigzag driving and has been reported by multiple research studies (Sayed et al., 2001; Eskandarian et al., 2007)
+ - **Phase 1**: Early-stage drowsiness where the driver is unable to smoothly control the vehicle, with large maneuvers to correct the vehicle position. This usually results in zigzag driving and has been reported by multiple research studies (Sayed et al., 2001; Eskandarian et al., 2007)
  - **Phase 2**: The dozing off phase. The driver stops reacting to feedback from the road, therefore the steering sensors have a flat and constant value which is usually combined with an increase lateral position (Eskandarian et al., 2007).
 
 Typically, these two phases alternate each other in drowsy individual, right before a crash (Figure #todo )
 
 /img/steering.png
 
-**Figure** #Todo. Steering wheel angle patterns in a 5 km drive simulation. There are two main phases: Phase 1 characterised by large changes in steering angles and Phase 2 with rather constant values. *Figure adapted from Eskandarian et al., 2007*.
+**Figure** #Todo. Steering wheel angle patterns in a 5 km drive simulation. There are two main phases: Phase 1 characterized by large changes in steering angles and Phase 2 with rather constant values. *Figure adapted from Eskandarian et al., 2007*.
 
 Other measures that can be calculated from steering sensors are the Standard Deviation of Angular Velocity (SDAV) of the steering wheel and the proportion of STeering wheel movements EXceeding Three degrees (STEX3). These are highly correlated to Psychomotor Vigilance Tests and the KSS scale (Forsman et al., 2013). 
 
-These sensors work optimally with steering angles between 0.5° - 5.0°  and they are also relatively easy to install on vehicles. Steering wheel metrics however, are too dependent on roads with specific geometries and may be affected by the vehicle kinetics in particular environments (Eskandarian et al., 2007).          Additionally, monotonous roads such as straight roads, provide little to no variation to be detected  which may result in drowsiness not being detected. Steering wheel sensors may also fail to detect changes in relatively straight roads or highly trafficked roads, which are among the roads with the highest number of accidents (Eskandarian et al., 2007).
+These sensors work optimally with steering angles between 0.5° - 5.0°  and they are also relatively easy to install on vehicles. Steering wheel metrics, however, are too dependent on roads with specific geometries and may be affected by the vehicle kinetics in particular environments (Eskandarian et al., 2007).          Additionally, monotonous roads such as straight roads, provide little to no variation to be detected  which may result in drowsiness not being detected. Steering wheel sensors may also fail to detect changes in relatively straight roads or highly trafficked roads, which are among the roads with the highest number of accidents (Eskandarian et al., 2007).
 
 ### Lane Position Sensors 
 
  Lane position sensors involve a combination of an external camera and lane-tracking algorithms. Then, the position of the vehicle can be calculated with respect to the lanes (Ingre et al., 2006). 
  
- Patterns that can be calculated from this type of data are: Standard Deviation of Lane Position (SDLP), Lateral Lane Position and the Frequency of Abnormal Lane Deviation (Ingre et al., 2006; Cheng et al., 2012; Sun et al., 2017).  In their research, Ingre et al. (2006) found significant correlation between the KSS scale and both the SDLP (Figure #todo) and the blink duration (discussed in the next section).
+ Patterns that can be calculated from this type of data are Standard Deviation of Lane Position (SDLP), Lateral Lane Position and the Frequency of Abnormal Lane Deviation (Ingre et al., 2006; Cheng et al., 2012; Sun et al., 2017).  In their research, Ingre et al. (2006) found a significant correlation between the KSS scale and both the SDLP (Figure #todo) and the blink duration (discussed in the next section).
  
 /img/lane_position.png
 
-**Figure** #todo . Positive correlation between the Standard Deviation of Lane Position (SDLP) and the Karolinska Sleepiness Scale (KSS) (n = 20). The estimated fixed effect (thick) shows a peak in drowsiness (KSS 8-9) between SDLP of 0.36 and 0.40.
+**Figure** #todo . A positive correlation between the Standard Deviation of Lane Position (SDLP) and the Karolinska Sleepiness Scale (KSS) (n = 20). The estimated fixed effect (thick) shows a peak in drowsiness (KSS 8-9) between SDLP of 0.36 and 0.40.
 
- Limitations of this method include the dependency on road marks for lane detection, lighting and weather conditions (Sahayadhas et al., 2012). Additionally, the decrease in driving performance may not be uniquely due to drowsiness. An alternative root cause for example, may be the driver’s years of experience which may directly impact the driving performance.
+ Limitations of this method include the dependency on road marks for lane detection, lighting and weather conditions (Sahayadhas et al., 2012). Additionally, the decrease in driving performance may not be uniquely due to drowsiness. An alternative root cause, for example, could be the driver’s years of experience which may directly impact the driving performance.
  
 ## 2.3 Behavioural Measures
 
-Behavioural measures attempt at identifying behaviours associated with drowsiness. Behavioural measures usually rely on a camera that records the drivers face. A set of features are extracted from the pictures which can be correlated to drowsiness, such as for example, closed eyes for a prolonged period of time. 
+Behavioral measures attempt at identifying behaviors associated with drowsiness. Behavioral measures usually rely on a camera that records the driver's face. A set of features is extracted from the pictures which can be correlated to drowsiness, for example, closed eyes for a prolonged period. 
 
 The majority of the features correlated with drowsiness are obtained from the head, the mouth or the eyes.
 
 ### Head Features 
 
-Drowsy drivers seem to sway their heads (Sahayadhas et al., 2012), increase nodding, scratch their face more frequently and more prone to rotate their heads to the left to relieve tension on the neck (Eskandarian et al., 2007). The head position can also be used to calculate the slouching and posture adjustment frequency. The features involving rotations are quantifiable with available face detection methods (Eskandarian et al., 2007). Other behaviours like scratching may be harder to quantify and may not be consistent across different individuals. 
+Drowsy drivers seem to sway their heads (Sahayadhas et al., 2012), increase nodding, scratch their faces more frequently and more prone to rotate their heads to the left to relieve tension on the neck (Eskandarian et al., 2007). The head position can also be used to calculate the slouching and posture adjustment frequency. The features involving rotations are quantifiable with available face detection methods (Eskandarian et al., 2007). Other behaviors like scratching may be harder to quantify and may not be consistent across different individuals. 
 
 ### Mouth Features 
 
@@ -148,70 +148,70 @@ Yawns are the most common mouth features correlated with drowsiness. This is usu
 
 ### Eyes Features 
 
-Eyes, and more specifically blinking, have been studied extensively for drowsiness detection. The most commonly used approach is PERCLOS, the PERcentage of eyes CLOSure over a time period and has been shown to be very effective in drowsiness detection (Sahayadhas et al., 2012). A more recent study by Trutschel et al. (2017) however, challenged the effectiveness of PERCLOS and commercially available PERCLOS-based systems. In a trial with three commercial systems, PERCLOS had a higher error rate in drowsiness detection of about 10% compared to EEG data (Trutschel et al., 2017). This has been associated episodes of microsleep events where drivers are asleep with their eyes open which PERCLOS fails to address (Trutschel et al., 2017)
+Eyes, and more specifically blinking, have been studied extensively for drowsiness detection. The most commonly used approach is PERCLOS, the PERcentage of eyes CLOSure over a time period and is very effective in drowsiness detection (Sahayadhas et al., 2012). A more recent study by Trutschel et al. (2017) however, challenged the effectiveness of PERCLOS and commercially available PERCLOS-based systems. In a trial with three commercial systems, PERCLOS had a higher error rate in drowsiness detection of about 10% compared to EEG data (Trutschel et al., 2017). This has been associated with episodes of microsleep events where drivers are asleep with their eyes open which PERCLOS fails to address (Trutschel et al., 2017)
 
 Alternative eye features correlated with drowsiness include the Average Eye Closure Speed (AECS), Blink Frequency and Duration and pupil diameter (Wang et al., 2006). Additionally, eye gaze can also be extracted to verify whether the driver is looking at the road ahead (Wang et al., 2006).
 
 #todo picture of blinks or some other picture
 
-Once these features are extracted, a threshold is set to classify the driver as drowsy or not. Given that most of these features rely on a temporal dimension, they tend to perform better when used for a longer period of time (Wilkinson et al., 2013). 
+Once these features are extracted, a threshold is set to classify the driver as drowsy or not. Given that most of these features rely on a temporal dimension, they tend to perform better when used for a longer period (Wilkinson et al., 2013). 
 
-The main limitation of behavioural approaches is the camera as it is significantly affected by the light conditions. This has partially been minimised by the addition of an infrared camera(Sahayadhas et al., 2012). However, the systems may still be sensitive to sudden changes in illumination or dust accumulating on the camera sensor which may affect the feature detection steps.
+The main limitation of behavioral approaches is the camera as it is significantly affected by light conditions. This has partially been minimized by the addition of an infrared camera(Sahayadhas et al., 2012). However, the systems may still be sensitive to sudden changes in illumination or dust accumulating on the camera sensor which may affect the feature detection steps.
 
 ## 2.4 Biological Measures: 
 
 Biological measures focus on the detecting significant changes in physiological signals as measured by electrocardiogram (ECG),   electroencephalogram (EEG), electro-oculography (EOG), surface electromyogram (sEMG) (Dong et al., 2011). 
 
-EEG has been studied extensively, as it detects brain waves related to sleep (Qiong et al., 2006). Drowsiness is usually correlated with an increase of a continuous signal of α and θ waves compared to β waves, detectable with the formula (α + θ)/β (Dong et al., 2011). Although very accurate, EEG measurements are very invasive, consisting in electrodes in contact with the skin (Dong et al., 2011). Nonetheless it has been very useful to evaluate other patterns of drowsiness such as Standard Deviation of Steering Wheel Angle and Lateral Lane Position (Boyle et al., 2008). 
+EEG has been studied extensively, as it detects brain waves related to sleep (Qiong et al., 2006). Drowsiness is usually correlated with an increase of a continuous signal of α and θ waves compared to β waves, detectable with the formula (α + θ)/β (Dong et al., 2011). Although very accurate, EEG measurements are very invasive, consisting of electrodes in contact with the skin (Dong et al., 2011). Nonetheless, it has been very useful to evaluate other patterns of drowsiness such as Standard Deviation of Steering Wheel Angle and Lateral Lane Position (Boyle et al., 2008). 
 
 
 ## 3. Hybrid Solutions
 
-Theoretically, combining information about the driver physical state and the driving performance should improve the confidence of the detected fatigue (Dong et al., 2011). Hybrid solutions consider multiple patterns of drowsiness, such as the ones previously outlined, to refine the confidence of the prediction.
+Theoretically, combining information about the driver physical state and driving performance should improve the confidence of the detected fatigue (Dong et al., 2011). Hybrid solutions consider multiple patterns of drowsiness, such as the ones previously outlined, to refine the confidence of the prediction.
 
-As an example, Eskandarian et al. (2007) analysed driving data from 20 subjects over a period of two days. The study identified correlations between PERCLOS, Steering Wheel Angle, Lateral Displacement of the vehicle and vehicle crash accidents (Eskandarian et al., 2007). A neural network model trained on all of these patterns achieved a larger accuracy with a lower false-positive signals compared to just considering one pattern (Eskandarian et al., 2007).
+As an example, Eskandarian et al. (2007) analyzed driving data from 20 subjects over two days. The study identified correlations between PERCLOS, Steering Wheel Angle, Lateral Displacement of the vehicle and vehicle crash accidents (Eskandarian et al., 2007). A neural network model trained on all of these patterns achieved a larger accuracy with lower false-positive signals compared to just considering one pattern (Eskandarian et al., 2007).
 
 #todo : maybe add more info on hybrid?
 
-Neural networks are therefore suitable candidates for drowsiness detection solutions for three main reasons: personalization, accuracy and versatility.
+Neural networks are therefore suitable candidates for drowsiness detection solutions for three main reasons: personalization, accuracy, and versatility.
 
-- **Personalization:** Unlike many patterns of tiredness described earlier such as PERCLOS, they do not rely on specific values to determine the drowsiness. Instead, neural networks are able to *learn* drowsiness-specific patterns on a driver-to-driver basis, taking into account variations in the individuals.  
+- **Personalization:** Unlike many patterns of tiredness described earlier such as PERCLOS, neural networks do not rely on specific values to determine the drowsiness. Instead, neural networks can *learn* drowsiness-specific patterns on a driver-to-driver basis, taking into account variations in the individuals.  
 
-- **Accuracy:** Additionally, neural networks are able to improve their accuracy as more data from the driver is obtained compared to other algorithms. Their great versatility also allows them 
+- **Accuracy:** Additionally, neural networks can improve their accuracy as more data from the driver is obtained compared to other algorithms. Their great versatility also allows them 
 
 - **Versatility:** Due to their modular architecture, neural networks allow for multiple sources of data to be used, as in the case of Eskandarian et al. (2007). Additionally, this allows adaptation to data from new sensors that may be developed in the future. 
 
-In terms of drawbacks, neural networks generally take a longer development time, as they need to be trained with appropriate datasets and require hyperparameters tuning. Additionally, neural networks are black-boxed methods, meaning it may be complex to understand how a neural network arrived to its conclusions. Finally, neural networks are resource intensive which means they require high computational power to be trained.  
+In terms of drawbacks, neural networks generally take longer development time, as they need to be trained with appropriate datasets and require hyperparameters tuning. Additionally, neural networks are black-boxed methods, meaning it may be complex to understand how a neural network reached its conclusions. Finally, neural networks are resource-intensive which means they require high computational power to be trained.  
 
-Osmitau Technologies however, is tackling these problems to create a hybrid solution called Teyered, powered by neural networks:
+Osmitau Technologies, however, is tackling these problems to create a hybrid solution called Teyered, powered by neural networks:
 
-- **Development Time**: Osmitau’s team has had extensive experience in the fields of machine learning and data analysis, working at companies such as IBM, JPMorgan and Amazon. They take care of the development for you.
+- **Development Time**: Osmitau’s team has had extensive experience in the fields of machine learning and data analysis, working at companies such as IBM, JPMorgan, and Amazon. They take care of the development for you.
 
 - **Black Box**: Teyered does not uniquely rely on neural networks. Teyered exploits advanced statistical methods to extract relevant patterns from drivers’ data, and couples them with an efficient neural network to determine the drowsiness state of the driver.
 
-- **Computational Power:** Osmitau takes care of the computational resources required for training the neural network by using the best high performance cloud computing platforms provided by Google (GCP) and Amazon (AWS). This guarantees fast training times and immediate availability of resources. 
+- **Computational Power:** Osmitau takes care of the computational resources required for training the neural network by using the best high-performance cloud computing platforms provided by Google (GCP) and Amazon (AWS). This guarantees fast training times and the immediate availability of resources. 
 
 ## 4. Conclusion
    
-   Drowsiness on the wheel is one of the main causes of deadly accidents every year (AAA, 2010). Drowsiness also manifests itself in several detectable patterns which are used in current drowsiness-detection systems. 
+   Drowsiness on the wheel is one of the main causes of deadly accidents every year (AAA, 2010). Drowsiness also manifests itself in several detectable patterns that are used in current drowsiness-detection systems. 
    
-   The patterns most correlated with drowsiness involve vehicle sensors such as steering wheel angle and driver’s behaviour such as blinking rate. 
+   The patterns most correlated with drowsiness involve vehicle sensors such as steering wheel angle and driver’s behavior such as blinking rate. 
    
    Other physiological patterns such as EEG waves, although accurate, are invasive to the driver but can be used as a baseline to validate other patterns of tiredness. 
    
    The most accurate methods for drowsiness detection involve the use of multiple patterns. This can be done using a statistical approach, a neural-network approach or a combination of the two. 
          
-  Osmitau Technologies is currently building Teyered: a hybrid solution for drowsiness detection powered by neural networks. By embracing state-of-the-art machine learning techniques and advanced statistical methods, Teyered aims at detecting drowsiness with a much greater accuracy by building a personalized and versatile system. Teyered’s goal is to improve vehicle safety and prevent 
+  Osmitau Technologies is currently building Teyered: a hybrid solution for drowsiness detection powered by neural networks. By embracing state-of-the-art machine learning techniques and advanced statistical methods, Teyered aims at detecting drowsiness with much greater accuracy by building a personalized and versatile system. Teyered’s goal is to improve vehicle safety and prevent 
 
 ### Where to find more information
   
-  You can find out more about our company and our services at [www.osmitau.com](www.osmitau.com). We offer consulting services for AI and Machine Learning and can help you with tackle complex problmes that require optimal solutions. 
+  You can find out more about our company and our services at [www.osmitau.com](www.osmitau.com). We offer consulting services for AI and Machine Learning and can help you tackle complex problems that require optimal solutions. 
   
   Osmitau is aiming to release Teyered in June 2020. You can join our newsletter (we don’t spam, unlike the big guys).
 
 #todo Add newsletter
 
- Or you can email us at: hello@osmitau.com (we are quite nice too :P) 
+ Or you can email us at hello@osmitau.com (we are quite nice too :P) 
    
 # References: 
 

@@ -1,7 +1,9 @@
 \PassOptionsToPackage{unicode=true}{hyperref} % options for packages loaded elsewhere
 \PassOptionsToPackage{hyphens}{url}
 %
-\documentclass[a4paper]{article}
+%\documentclass[120pt]{article}
+\documentclass[a4paper, 12pt]{extarticle}
+
 \usepackage{lmodern}
 \usepackage{amssymb,amsmath}
 \usepackage{ifxetex,ifluatex}
@@ -79,12 +81,6 @@
 \renewcommand{\baselinestretch}{1.4}
 %% Set margins
 \usepackage[legalpaper, margin=1.3in]{geometry}
-
-\usepackage{sectsty}
-
-\sectionfont{\LARGE}
-
-\date{}
 
 \begin{document}
 
@@ -192,7 +188,7 @@ level. The Karolinska Sleepiness Scale (KSS) is a nine-point scale and
 it is the most widely used scales to describe drowsiness
 \cite{shahid_karolinska_2012}. Each rating of the KSS has an associated
 description as shown in Table \ref{table:karolinska}.
-
+\newpage
 \begin{longtable}[ht]{@{}ll@{}}
 \toprule
 \textbf{Rating} & \textbf{Description}\tabularnewline
@@ -234,7 +230,7 @@ alert the driver, affecting their drowsiness level
 Vehicle-based measures aim at determining the drowsiness level via the
 interaction between the driver and the vehicle. These usually involve
 sensors such as steering wheel sensors or lane position sensors.
-\clearpage
+
 \hypertarget{steering-wheel-sensors}{%
 \subsubsection{Steering Wheel Sensors}\label{steering-wheel-sensors}}
 
@@ -505,19 +501,17 @@ Osmitau is aiming to release Teyered in early 2020. You can join our newsletter 
 
 Or you can email us at \href{mailto:hello@osmitau.com}{\nolinkurl{hello@osmitau.com}}.
 
-\newpage
 \addcontentsline{toc}{section}{References}
 \bibliographystyle{plain}
 \bibliography{refs.bib}
-\newpage
 
 \newpage
+
 Special thanks to Eric Weber for the photograph on the cover of this
 white paper.
 
-
+\vspace*{\fill}
 \textbf{Notice:}  
-
 
 ALL INFORMATION PROVIDED IN THIS WHITE PAPER IS PROVIDED ``AS
 IS''. OSMITAU TECHNOLOGIES MAKES NO WARRANTIES, EXPRESSED, IMPLIED,
@@ -534,6 +528,8 @@ granted by implication or otherwise under any patent or patent rights of
 Osmitau Technologies. Specifications mentioned in this publication are
 subject to change without notice. This publication supersedes and
 replaces all information previously supplied.
+
+This document was last updated on \today.
 
 \newpage
 \end{document}

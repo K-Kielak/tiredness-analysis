@@ -1,8 +1,7 @@
 \PassOptionsToPackage{unicode=true}{hyperref} % options for packages loaded elsewhere
 \PassOptionsToPackage{hyphens}{url}
 %
-%\documentclass[120pt]{article}
-\documentclass[a4paper, 12pt]{extarticle}
+\documentclass[12pt]{extarticle}
 
 \usepackage{lmodern}
 \usepackage{amssymb,amsmath}
@@ -30,9 +29,7 @@
 \setlength{\parskip}{6pt plus 2pt minus 1pt}
 }
 \usepackage{hyperref}
-\hypersetup{
-            pdfborder={0 0 0},
-            breaklinks=true}
+\hypersetup{pdfborder={0 0 0},breaklinks=true}
 \urlstyle{same}  % don't use monospace font for urls
 \usepackage{longtable,booktabs}
 % Fix footnotes in tables (requires footnote package)
@@ -80,7 +77,7 @@
 %% Set spacing to 1.5
 \renewcommand{\baselinestretch}{1.4}
 %% Set margins
-\usepackage[legalpaper, margin=1.3in]{geometry}
+\usepackage[a4paper, margin=1.3in]{geometry}
 
 \begin{document}
 
@@ -188,7 +185,7 @@ level. The Karolinska Sleepiness Scale (KSS) is a nine-point scale and
 it is the most widely used scales to describe drowsiness
 \cite{shahid_karolinska_2012}. Each rating of the KSS has an associated
 description as shown in Table \ref{table:karolinska}.
-\newpage
+
 \begin{longtable}[ht]{@{}ll@{}}
 \toprule
 \textbf{Rating} & \textbf{Description}\tabularnewline
@@ -256,13 +253,12 @@ steering wheel sensors:
 Typically, these two phases alternate each other in drowsy individual,
 right before a crash (Figure \ref{fig:steering})
 
-\begin{figure}[ht]
+\begin{figure}[!ht]
     \centering
     \includegraphics[width=0.9\textwidth]{img/steering.png}
     \caption{Steering wheel angle patterns in a 5 km drive
 simulation. There are two main phases: Phase 1 characterized by large
-changes in steering angles and Phase 2 with rather constant values.
-\cite{eskandarian_evaluation_2007}}
+changes in steering angles and Phase 2 with rather constant values. \cite{eskandarian_evaluation_2007}}
     \label{fig:steering}
 \end{figure}
 
@@ -296,10 +292,13 @@ Deviation of Lane Position (SDLP) \cite{ingre_subjective_2006}, Lateral
 Lane Position \cite{cheng_driver_2012} and the Frequency of Abnormal
 Lane Deviation \cite{hu_experimental_2017}. In their research, Ingre et
 al. \cite{ingre_subjective_2006} found a significant correlation between
-the KSS scale and both the SDLP (Figure\ref{fig:lane_position}) and the blink duration
+the KSS scale and both the SDLP (Figure \ref{fig:lane_position}) and the blink duration
 which is also discussed in the next section.
 
-\begin{figure}[ht]
+Limitations of this method include the dependency on road marks for lane detection, lighting and weather
+conditions \cite{sahayadhas_detecting_2012}.
+
+\begin{figure}
     \centering
     \includegraphics[width=0.8\textwidth]{img/lane_position.png}
     \caption{A positive correlation between the Standard
@@ -309,9 +308,7 @@ drowsiness (KSS 8-9) between SDLP of 0.36 and 0.40 \cite{ingre_subjective_2006}.
     \label{fig:lane_position}
 \end{figure}
 
-Limitations of this method include the dependency on road marks for lane detection, lighting and weather
-conditions \cite{sahayadhas_detecting_2012}.
-
+\newpage
 \hypertarget{behavioural-measures}{%
 \subsection{2.3 Behavioural Measures}\label{behavioural-measures}}
 
@@ -467,12 +464,12 @@ solution called Teyered, powered by machine learning:
   and Amazon (AWS). This approach guarantees fast training times and the
   immediate availability of resources.
 \end{itemize}
+\newpage
 
 \hypertarget{conclusion}{%
 \section{4. Conclusion}\label{conclusion}}
 
-Truck and bus accidents result in a loss of \$134 Billion which includes
-property damage, injury and fatalities
+Truck and bus accidents resulted in a loss of \$134 Billion in 2016 only, which includes property damage, injury and fatalities
 \cite{federal_motor_carrier_safety_administration_pocket_2018}. More
 than 40\% of accidents involving commercial vehicles occur due to
 drowsiness \cite{flatley_sleep-related_2004} and it manifests itself in
@@ -490,24 +487,32 @@ fixed drowsiness threshold, an adaptive black-box machine learning or a
 combination of the two.
 
 \hypertarget{find-out-more}{%
-\subsection{Find out more}\label{find-out-more}}
+\section{Find out more}\label{find-out-more}}
 
 You can find out more about our company and our services at
-\url{www.osmitau.com}. We offer consulting services for AI and Machine
+\newline 
+\newline 
+\centerline{\url{www.osmitau.com}}
+\newline 
+\newline 
+We offer consulting services for AI and Machine
 Learning and can help you tackle complex problems that require optimal
 solutions.
 
 Osmitau is aiming to release Teyered in early 2020. You can join our newsletter by clicking \href{http://eepurl.com/gO-J9n}{HERE} (we don't spam, unlike the big guys).
 
 Or you can email us at \href{mailto:hello@osmitau.com}{\nolinkurl{hello@osmitau.com}}.
+\newpage
 
 \addcontentsline{toc}{section}{References}
-\bibliographystyle{plain}
+%% Organizes bibliography numbers in order of appearance.
+\bibliographystyle{ieeetr}
+
 \bibliography{refs.bib}
 
 \newpage
 
-Special thanks to Eric Weber for the photograph on the cover of this
+Special thanks to Eric Weber for the photographs on the cover of this
 white paper.
 
 \vspace*{\fill}

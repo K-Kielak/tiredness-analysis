@@ -3,6 +3,7 @@ import logging
 import os
 import sys
 import time
+from collections import deque
 
 from teyered.data_processing.blinks.blinks_detection import detect_blinks
 from teyered.io.video_generator import VideoGenerator
@@ -11,6 +12,9 @@ from teyered.teyered_processor import TeyeredProcessor
 
 logger = logging.getLogger(__name__)
 
+
+SECONDS_IN_MIN = 60
+PERCLOS_CLOSEDNESS_THRESHOLD = 0.8
 
 LEFT_EYE_PREFIX = 'left_'
 RIGHT_EYE_PREFIX = 'right_'
@@ -50,19 +54,32 @@ class VideoAnalyzer:
         """
         self._reset()
         if data_path is not None and os.path.exists(data_path):
+            logger.info(f'Loading data from {data_path}...')
             self._load_data(data_path)
+            logger.info('Data has been loaded.')
         else:
             self._process_videos(vids_paths, frames_to_skip)
+            logger.info('Extracting information from all videos has finished.')
             if data_path is not None:
+                logger.info(f'Saving data at {data_path}...')
                 self._save_data(data_path)
+                logger.info(f'Data has been saved.')
 
-        logger.info('Extracting information from all videos has finished.')
-        logger.info('Starting blinks calculation...')
+        logger.info('Removing frames with undetermined closedness.')
         self._remove_undetermined_closedness(LEFT_EYE_PREFIX)
         self._remove_undetermined_closedness(RIGHT_EYE_PREFIX)
+        logger.info('Removed.')
+
+        logger.info('Starting PERCLOS calculation...')
+        self._calc_perclos(LEFT_EYE_PREFIX)
+        self._calc_perclos(RIGHT_EYE_PREFIX)
+        logger.info('PERCLOS values have been calculated')
+
+        logger.info('Starting blinks calculation...')
         self._calc_blinks_data(LEFT_EYE_PREFIX)
         self._calc_blinks_data(RIGHT_EYE_PREFIX)
         logger.info('Blinks calculation has finished')
+
         return self._data
 
     def _load_data(self, data_path):
@@ -130,6 +147,24 @@ class VideoAnalyzer:
         self._data[f'{prefix}eye_closedness'] = \
             [(t, c) for t, c in self._data[f'{prefix}eye_closedness'] if c >= 0]
 
+    def _calc_perclos(self, prefix):
+        measurements = self._data[f'{prefix}eye_closedness']
+        time_window = deque()
+        height_window = deque()
+        for curr_time, curr_height in measurements:
+            time_window.append(curr_time)
+            height_window.append(curr_height)
+            # Get rid of all frames outside the 1min window
+            while time_window[0] < curr_time - SECONDS_IN_MIN:
+                time_window.popleft()
+                height_window.popleft()
+
+            total_frames_count = len(height_window)
+            closed_frames_count = len([h for h in height_window
+                                       if h < PERCLOS_CLOSEDNESS_THRESHOLD])
+            perclos_val = closed_frames_count / total_frames_count
+            self._data[f'{prefix}perclos'].append((curr_time, perclos_val))
+
     def _calc_blinks_data(self, prefix):
         measurements = self._data[f'{prefix}eye_closedness']
         blinks = detect_blinks(measurements)
@@ -143,15 +178,40 @@ class VideoAnalyzer:
             self._data[f'{prefix}time_between_blinks']\
                 .append((prev_blink_end, curr_blink_start - prev_blink_end))
 
+        blinks_window = deque()
+        for curr_blink in blinks:
+            blinks_window.append(curr_blink)
+            window_end = curr_blink.get_time_range()[1]
+            window_start = window_end - SECONDS_IN_MIN
+            # Get rid of all blinks that are fully outside 1min window
+            while blinks_window[0].get_time_range()[1] < window_start:
+                blinks_window.popleft()
+
+            # If blink starts outside of the window but ends inside
+            # include proportion of the blink that is within the window
+            partial_blink_proportion = 1
+            if blinks_window[0].get_time_range()[0] < window_start:
+                duration_inside_window = (blinks_window[0].get_time_range()[1]
+                                          - window_start)
+                partial_blink_proportion = (duration_inside_window
+                                            / blinks_window[0].get_duration())
+
+            blink_rate = len(blinks_window) - 1 + partial_blink_proportion
+            self._data[f'{prefix}blink_rate'].append((window_end, blink_rate))
+
     def _reset(self):
         self._processor.reset()
         self._data = {
             'left_eye_closedness': [],
             'right_eye_closedness': [],
             'pose_reprojection_err': [],
+            'left_perclos': [],
+            'right_perclos': [],
             'left_blink_lengths': [],
             'left_time_between_blinks': [],
+            'left_blink_rate': [],
             'right_blink_lengths': [],
-            'right_time_between_blinks': []
+            'right_time_between_blinks': [],
+            'right_blink_rate': []
         }
         self._last_vid_end_timespan = 0

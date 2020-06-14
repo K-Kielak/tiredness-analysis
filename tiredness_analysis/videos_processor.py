@@ -1,8 +1,10 @@
 import csv
 import logging
+import os
 import sys
 import time
 from collections import deque, namedtuple
+from typing import Sequence, Union
 
 from teyered.io.video_generator import VideoGenerator
 from teyered.teyered_processor import TeyeredProcessor
@@ -19,7 +21,7 @@ ProcessedVideos = namedtuple('ProcessedVideos', ['timespans',
 
 class VideosProcessor:
 
-    def __init__(self, batch_size, frames_to_skip=1):
+    def __init__(self, batch_size: int, frames_to_skip: int = 1):
         logger.debug('Initializing VideoProcessor...')
         self._processor = TeyeredProcessor()
         self._batch_size = batch_size
@@ -29,7 +31,8 @@ class VideosProcessor:
         self._processed_data = ProcessedVideos(deque(), deque(), deque(), deque())
         logger.debug('VideoProcessor initialized.')
 
-    def process_videos(self, videos):
+    def process_videos(self, videos: Sequence[Union[str, os.PathLike]]
+                       ) -> ProcessedVideos:
         """Processes videos one by one and outputs processed video data."""
         for vid in videos:
             logger.info(f'Processing video {vid}...')
@@ -38,7 +41,7 @@ class VideosProcessor:
 
         return self._processed_data
 
-    def _process_video(self, video):
+    def _process_video(self, video: VideoGenerator):
         self._processor.reset()
         analysis_start = time.time()
         curr_vid_end_timespan = 0
@@ -69,7 +72,8 @@ class VideosProcessor:
         self._last_vid_end_timespan = curr_vid_end_timespan
 
 
-def save_processed_videos(processed_videos, output_file):
+def save_processed_videos(processed_videos: ProcessedVideos,
+                          output_file: Union[str, os.PathLike]):
     logger.info(f'Saving processed videos to {output_file}...')
     with open(output_file, 'w') as f:
         writer = csv.writer(f)
@@ -78,7 +82,8 @@ def save_processed_videos(processed_videos, output_file):
     logger.info(f'Saving processed videos has finished.')
 
 
-def load_processed_videos(processed_videos_file):
+def load_processed_videos(processed_videos_file: Union[str, os.PathLike]
+                          ) -> ProcessedVideos:
     logger.info(f'Loading processed videos from {processed_videos_file}...')
     data = ProcessedVideos(deque(), deque(), deque(), deque())
     with open(processed_videos_file, 'r') as f:

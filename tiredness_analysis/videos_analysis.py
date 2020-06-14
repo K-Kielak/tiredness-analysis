@@ -16,7 +16,6 @@ AnalyzedData = namedtuple('AnalyzedData',
                            'left_perclos', 'right_perclos',
                            'left_blink_lengths', 'right_blink_lengths',
                            'left_time_between_blinks', 'right_time_between_blinks',
-                           'left_blink_rate', 'right_blink_rate',
                            'pose_reprojection_err'])
 
 
@@ -36,8 +35,8 @@ def analyze_data(data):
     logger.info('PERCLOS values have been calculated')
 
     logger.info('Starting blinks calculation...')
-    left_between, left_lengths, left_rate = _calc_blinks_data(left_closedness)
-    right_between, right_lengths, right_rate = _calc_blinks_data(right_closedness)
+    left_between, left_lengths = _calc_blinks_data(left_closedness)
+    right_between, right_lengths = _calc_blinks_data(right_closedness)
     logger.info('Blinks calculation has finished')
 
     return AnalyzedData(left_eye_closedness=left_closedness,
@@ -48,38 +47,27 @@ def analyze_data(data):
                         right_time_between_blinks=right_between,
                         left_blink_lengths=left_lengths,
                         right_blink_lengths=right_lengths,
-                        left_blink_rate=left_rate,
-                        right_blink_rate=right_rate,
-                        pose_reprojection_err=zip(data.timespans,
-                                                  data.pose_reprojection_err))
+                        pose_reprojection_err=deque(zip(data.timespans,
+                                                    data.pose_reprojection_err)))
 
 
 def _remove_undetermined_closedness(eye_closedness):
     """Filter out all frames for which closedness couldn't be determined."""
-    return [(t, c) for (t, c) in eye_closedness if c >= 0.]
+    return deque((t, c) for (t, c) in eye_closedness if c >= 0.)
 
 
 def _calc_perclos(eye_closedness):
-    perclos = deque()
-    time_window = deque()
-    height_window = deque()
-    for curr_time, curr_closedness in eye_closedness:
-        time_window.append(curr_time)
-        height_window.append(curr_closedness)
-        # Get rid of all frames outside the 1min window
-        while time_window[0] < curr_time - SECONDS_IN_MIN:
-            time_window.popleft()
-            height_window.popleft()
-
-        total_frames_count = len(height_window)
-        closed_frames_count = len([h for h in height_window
-                                   if h < PERCLOS_CLOSEDNESS_THRESHOLD])
-        perclos.append((curr_time, closed_frames_count / total_frames_count))
-
-    return perclos
+    """Calculates PERCLOS signal (1 if below the threshold, 0 otherwise)"""
+    return deque((t, float(c < PERCLOS_CLOSEDNESS_THRESHOLD)) for t, c in eye_closedness)
 
 
 def _calc_blinks_data(eye_closedness):
+    """Calculates different blink metrics.
+
+    Produces:
+        1. `time_between_blinks` - time duration of gaps between each blink.
+        2. `blink_lengths` - time duration of each blink.
+    """
     blinks = detect_blinks(eye_closedness)
 
     time_between_blinks = deque()
@@ -91,25 +79,4 @@ def _calc_blinks_data(eye_closedness):
         time_between_blinks.append((prev_blink_end, curr_blink_start - prev_blink_end))
         blink_lengths.append((curr_blink_start, blinks[i].get_duration()))
 
-    blinks_window = deque()
-    blink_rates = deque()
-    for curr_blink in blinks:
-        blinks_window.append(curr_blink)
-        window_end = curr_blink.get_time_range()[1]
-        window_start = window_end - SECONDS_IN_MIN
-        # Get rid of all blinks that are fully outside 1min window
-        while blinks_window[0].get_time_range()[1] < window_start:
-            blinks_window.popleft()
-
-        # If blink starts outside of the window but ends inside
-        # include proportion of the blink that is within the window
-        partial_blink_proportion = 1
-        if blinks_window[0].get_time_range()[0] < window_start:
-            duration_inside_window = (blinks_window[0].get_time_range()[1] - window_start)
-            partial_blink_proportion = (duration_inside_window
-                                        / blinks_window[0].get_duration())
-
-        rate = len(blinks_window) - 1 + partial_blink_proportion
-        blink_rates.append((window_end, rate))
-
-    return time_between_blinks, blink_lengths, blink_rates
+    return time_between_blinks, blink_lengths

@@ -1,14 +1,12 @@
 import logging
-import os
+import pathlib
 
+import click
 import matplotlib.pyplot as plt
 import numpy as np
 
-from tiredness_analysis.config import ANALYSIS_OUTPUT_DIR, BATCH_SIZE
-from tiredness_analysis.config import DATA_FILEPATH, FRAMES_TO_SKIP
-from tiredness_analysis.config import LOGGING_LEVEL, RENDER_FIGS
-from tiredness_analysis.config import VIDS_TO_ANALYZE
-from tiredness_analysis.videos_analyzer import VideoAnalyzer
+from tiredness_analysis.videos_analysis import analyze_data
+from tiredness_analysis.videos_processor import load_processed_videos
 
 
 logger = logging.getLogger(__name__)
@@ -21,28 +19,24 @@ MOVING_STATS_POINTS = 10
 OUTLIERS_THRESHOLD_COEFF = 3
 
 
-def main():
-    os.mkdir(ANALYSIS_OUTPUT_DIR)
-    videos_analyzer = VideoAnalyzer(BATCH_SIZE)
-    analyzed_data = videos_analyzer.analyze_videos(VIDS_TO_ANALYZE,
-                                                   FRAMES_TO_SKIP,
-                                                   DATA_FILEPATH)
-    _plot_data(analyzed_data,
-               render_figs=RENDER_FIGS,
-               output_dir=ANALYSIS_OUTPUT_DIR)
+@click.command('plot_patterns')
+@click.option('--input_data', '-i', required=True,
+              type=click.Path(dir_okay=False, exists=True, readable=True),
+              help='Path to the processed (extracted) video data.')
+@click.option('--output_dir', '-o', required=True,
+              type=click.Path(file_okay=False, writable=True),
+              help='Directory where produced plots should be saved.')
+def plot_patterns(input_data, output_dir):
+    """Performs an analysis of the videos data and plots its results."""
+    pathlib.Path(output_dir).mkdir(parents=True, exist_ok=True)
+    data = load_processed_videos(input_data)
+    data = analyze_data(data)
+    _plot_data(data, output_dir=output_dir)
 
 
-def _plot_data(data_dict, render_figs=True, output_dir=None):
-    """
-    Takes data and plots it to make it ready for human-driven analysis.
-    :param data_dict: string -> list dict. Key string indicates the name of the
-        data that is the stored in a list of tuples (timespan, value).
-    :param render_figs: boolean specifying if the figures should be rendered
-        live while executing the program.
-    :param output_dir: string specifying directory path where the figures
-        should be saved. None if figures shouldn't be saved anywhere.
-    """
-    for i, (key, data) in enumerate(data_dict.items()):
+def _plot_data(data, output_dir=None):
+    for i, (key, data) in enumerate(data._asdict().items()):
+        logger.info(f'Plotting {key}...')
         timespans, values = zip(*data)  # unzip list of tuples
 
         # Calculate moving stats and trends
@@ -55,7 +49,7 @@ def _plot_data(data_dict, render_figs=True, output_dir=None):
         std_below_trend = np.poly1d(np.polyfit(mvstats_timespans, std_below, 1))
 
         # Find maximum and minimum values (excluding outliers) to limit plots
-        min_plot_val, max_plot_val = _find_min_max_excuding_outliers(values)
+        min_plot_val, max_plot_val = _find_min_max_excluding_outliers(values)
 
         plt.figure(key, figsize=(12.8, 4.8))
         plt.suptitle(key)
@@ -75,8 +69,8 @@ def _plot_data(data_dict, render_figs=True, output_dir=None):
                  zorder=2, label='std trends')
         plt.plot(mvstats_timespans, mean_trend(mvstats_timespans), 'k--',
                  zorder=2, label='trend')
-        plt.plot(mvstats_timespans, moving_mean, 'r-', zorder=3,
-                 label='moving mean')
+        plt.plot(mvstats_timespans, moving_mean, 'r-',
+                 zorder=3, label='moving mean')
         plt.legend(loc='best')
         plt.grid(True)
 
@@ -90,10 +84,8 @@ def _plot_data(data_dict, render_figs=True, output_dir=None):
 
         # Saving/rendering plots
         if output_dir:
-            fig_path = os.path.join(output_dir, f'{key}.png')
+            fig_path = pathlib.Path(output_dir).joinpath(f'{key}.png')
             plt.savefig(fig_path)
-        if render_figs:
-            plt.show()
 
 
 def _calc_moving_stats(data):
@@ -119,7 +111,7 @@ def _calc_moving_stats(data):
     return mean, np.sqrt(variance)
 
 
-def _find_min_max_excuding_outliers(values):
+def _find_min_max_excluding_outliers(values):
     std = np.std(values)
     mean = np.mean(values)
     min_val = mean
@@ -133,8 +125,3 @@ def _find_min_max_excuding_outliers(values):
             min_val = v
 
     return min_val, max_val
-
-
-if __name__ == '__main__':
-    logging.basicConfig(level=LOGGING_LEVEL)
-    main()

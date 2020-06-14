@@ -1,4 +1,6 @@
 import logging
+import os
+from typing import Union, Sequence
 
 import click
 
@@ -19,7 +21,10 @@ logger = logging.getLogger(__name__)
                    'processing but the less accurate is the output.')
 @click.argument('videos', required=True, type=click.Path(exists=True, readable=True), nargs=-1)
 @click.argument('output_file', required=True, type=click.Path(dir_okay=False, writable=True), nargs=1)
-def process_videos(videos, output_file, batch_size, frames_to_skip):
+def process_videos(batch_size: int,
+                   frames_to_skip: int,
+                   videos: Sequence[Union[str, os.PathLike]],
+                   output_file: Union[str, os.PathLike]):
     """Extracts all the necessary data from videos and saves it for analysis.
 
     VIDEOS is the list of videos that are going to be processed. This tool

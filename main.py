@@ -2,6 +2,7 @@ import logging
 
 import click
 
+from tiredness_analysis.runnables.extract_features import extract_features
 from tiredness_analysis.runnables.plot_patterns import plot_patterns
 from tiredness_analysis.runnables.process_videos import process_videos
 
@@ -27,6 +28,7 @@ def _setup_logging(debug: bool):
 
 cli.add_command(process_videos)
 cli.add_command(plot_patterns)
+cli.add_command(extract_features)
 
 
 if __name__ == '__main__':

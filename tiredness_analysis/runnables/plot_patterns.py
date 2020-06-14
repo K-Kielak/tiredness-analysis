@@ -1,11 +1,13 @@
 import logging
+import os
 import pathlib
+from typing import Union, Sequence
 
 import click
 import matplotlib.pyplot as plt
 import numpy as np
 
-from tiredness_analysis.videos_analysis import analyze_data
+from tiredness_analysis.videos_analysis import analyze_data, AnalyzedData
 from tiredness_analysis.videos_processor import load_processed_videos
 
 
@@ -26,15 +28,16 @@ OUTLIERS_THRESHOLD_COEFF = 3
 @click.option('--output_dir', '-o', required=True,
               type=click.Path(file_okay=False, writable=True),
               help='Directory where produced plots should be saved.')
-def plot_patterns(input_data, output_dir):
+def plot_patterns(input_data: Union[str, os.PathLike],
+                  output_dir: Union[str, os.PathLike]):
     """Performs an analysis of the videos data and plots its results."""
     pathlib.Path(output_dir).mkdir(parents=True, exist_ok=True)
     data = load_processed_videos(input_data)
     data = analyze_data(data)
-    _plot_data(data, output_dir=output_dir)
+    _plot_data(data, output_dir)
 
 
-def _plot_data(data, output_dir=None):
+def _plot_data(data: AnalyzedData, output_dir: Union[str, os.PathLike]):
     for i, (key, data) in enumerate(data._asdict().items()):
         logger.info(f'Plotting {key}...')
         timespans, values = zip(*data)  # unzip list of tuples
@@ -88,20 +91,20 @@ def _plot_data(data, output_dir=None):
             plt.savefig(fig_path)
 
 
-def _calc_moving_stats(data):
-    window_size = len(data) // MOVING_STATS_POINTS
-    stats_length = len(data) - window_size + 1
+def _calc_moving_stats(values: Sequence[float]):
+    window_size = len(values) // MOVING_STATS_POINTS
+    stats_length = len(values) - window_size + 1
     mean = np.zeros(stats_length)
     variance = np.zeros(stats_length)
 
     # Calc initial window
-    mean[0] = np.mean(data[:window_size])
-    variance[0] = np.var(data[:window_size])
+    mean[0] = np.mean(values[:window_size])
+    variance[0] = np.var(values[:window_size])
 
     # Calculate following windows reusing the initial one
     for i in range(1, stats_length):
-        new_x = data[i + window_size - 1]
-        old_x = data[i - 1]
+        new_x = values[i + window_size - 1]
+        old_x = values[i - 1]
         mean_change = (new_x-old_x) / window_size
         mean[i] = mean[i - 1] + mean_change
         variance_change = (new_x-old_x) * (new_x-mean[i] + old_x-mean[i - 1])
@@ -111,7 +114,7 @@ def _calc_moving_stats(data):
     return mean, np.sqrt(variance)
 
 
-def _find_min_max_excluding_outliers(values):
+def _find_min_max_excluding_outliers(values: Sequence[float]):
     std = np.std(values)
     mean = np.mean(values)
     min_val = mean

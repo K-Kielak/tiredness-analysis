@@ -1,13 +1,15 @@
 import logging
 from collections import deque, namedtuple
+from typing import Tuple, Iterable, Deque
 
 from teyered.data_processing.blinks.blinks_detection import detect_blinks
 
+from tiredness_analysis.videos_processor import ProcessedVideos
 
 logger = logging.getLogger(__name__)
 
 
-SECONDS_IN_MIN = 60
+SECONDS_PER_MIN = 60
 PERCLOS_CLOSEDNESS_THRESHOLD = 0.8
 
 
@@ -19,13 +21,13 @@ AnalyzedData = namedtuple('AnalyzedData',
                            'pose_reprojection_err'])
 
 
-def analyze_data(data):
+def analyze_data(data: ProcessedVideos) -> AnalyzedData:
     """Analyzes processed videos data and returns results of the analysis."""
     logger.info('Removing frames with undetermined closedness.')
-    left_closedness = zip(data.timespans, data.left_eye_closedness)
+    left_closedness = deque(zip(data.timespans, data.left_eye_closedness))
     left_closedness = _remove_undetermined_closedness(left_closedness)
 
-    right_closedness = zip(data.timespans, data.right_eye_closedness)
+    right_closedness = deque(zip(data.timespans, data.right_eye_closedness))
     right_closedness = _remove_undetermined_closedness(right_closedness)
     logger.info('Removed.')
 
@@ -51,17 +53,21 @@ def analyze_data(data):
                                                     data.pose_reprojection_err)))
 
 
-def _remove_undetermined_closedness(eye_closedness):
+def _remove_undetermined_closedness(eye_closedness: Iterable[Tuple[float, float]]
+                                    ) -> Deque[Tuple[float, float]]:
     """Filter out all frames for which closedness couldn't be determined."""
     return deque((t, c) for (t, c) in eye_closedness if c >= 0.)
 
 
-def _calc_perclos(eye_closedness):
+def _calc_perclos(eye_closedness: Iterable[Tuple[float, float]]
+                  ) -> Deque[Tuple[float, float]]:
     """Calculates PERCLOS signal (1 if below the threshold, 0 otherwise)"""
     return deque((t, float(c < PERCLOS_CLOSEDNESS_THRESHOLD)) for t, c in eye_closedness)
 
 
-def _calc_blinks_data(eye_closedness):
+def _calc_blinks_data(eye_closedness: Iterable[Tuple[float, float]]
+                      ) -> Tuple[Deque[Tuple[float, float]],
+                                 Deque[Tuple[float, float]]]:
     """Calculates different blink metrics.
 
     Produces:

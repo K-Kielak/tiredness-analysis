@@ -20,6 +20,7 @@ def _setup_logging(debug: bool):
     console_handler = logging.StreamHandler()
     console_handler.setFormatter(log_formatter)
     console_handler.setLevel(level)
+    logging.basicConfig(level=level, format=message_format)
     logger = logging.getLogger('tiredness_analysis')
     logger.setLevel(level)
     logger.addHandler(console_handler)

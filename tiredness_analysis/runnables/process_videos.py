@@ -15,10 +15,10 @@ logger = logging.getLogger(__name__)
 @click.option('--batch_size', '-b', default=100, show_default=True, type=int,
               help='Batch size used for processing videos. The bigger, the '
                    'faster the processing but higher RAM usage.')
-@click.option('--frames_to_skip', '-f', default=1, show_default=True, type=int,
-              help='Data will be extracted only for one frame every '
-                   '`frames_to_skip` frames. The higher, the faster the '
-                   'processing but the less accurate is the output.')
+@click.option('--frames_to_skip', '-f', default=0, show_default=True, type=int,
+              help='For each extracted frame, further `frames_to_skip` will '
+                   'be skipped. The higher, the faster the processing but '
+                   'the less accurate is the output.')
 @click.argument('videos', required=True, type=click.Path(exists=True, readable=True), nargs=-1)
 @click.argument('output_file', required=True, type=click.Path(dir_okay=False, writable=True), nargs=1)
 def process_videos(batch_size: int,

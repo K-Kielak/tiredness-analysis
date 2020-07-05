@@ -7,5 +7,5 @@ for person_id_folder in video/*; do
     output_filename=output/$person_id'_'$class_id'.csv'
     python main.py process_videos $video_class $output_filename &
     done
-done
 wait
+done

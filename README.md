@@ -4,6 +4,7 @@
  patterns that can be spotted from face-centered videos.
 
 
-- [WP01: Processing videos from the UTA-RLDD dataset](work-products/WP01/)
+- [WP01: Processing videos from the UTA-RLDD dataset](work_products/WP01/)
+- [WP02: Converts + compresses videos from the UTA-RLDD dataset](work_products/WP02/)
 
 
